@@ -2,6 +2,8 @@
 https://www.youtube.com/watch?v=c-QsfbznSXI
 Authentication boilerplate
 
+# Frontend
+
 # Backend
 ## Running the App (after setup)
 ```bash

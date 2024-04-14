@@ -45,7 +45,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     },
     minor: {
       outlined: "border-2 border-minor",
-      filled: "bg-minor hover:bg-minor/80"
+      filled: "bg-minor hover:bg-minor/80",
+      link: "text-minor hover:text-minor/80 transistion-all ease-in-out duration-200"
     },
     info: {
       outlined: "border-2 border-blue-600",

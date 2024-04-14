@@ -4,20 +4,32 @@ import {
   mockUsers,
 } from '@mocks';
 import { getUserId } from './getUserId';
+import { ACCESS_TOKEN } from '@constant';
 
 const useMockData = true //import.meta.env.VITE_ENV === "development" ? true : false;
 const log = false;
-const env = import.meta.env.VITE_ENV
-console.log(env)
 
 export const axiosInstance = axios.create({
-  baseURL: env === "development" ? "http://localhost:8000/api/" : "prod",
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   },
   withCredentials: true, // this enables us to send a HTTPOnly cookie automagically for JWT authentication
 });
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    if(token){
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
 
 if (useMockData) {
   const mockAxiosInstance = new MockAdapter(axiosInstance, { delayResponse: 1500 });

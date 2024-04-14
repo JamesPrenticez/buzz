@@ -1,12 +1,17 @@
 import React from 'react'
-import { useAppSelector } from '@redux/hooks';
+import { NavLink } from 'react-router-dom';
+import { Paths } from '@models';
+import { Button } from '@components/ui';
 
 const Home = () => {
-  const user = useAppSelector((state) => state.user.data);
-  console.log(user)
-
   return (
-    <div>Welcome {user.firstName}!</div>
+    <div>
+      <NavLink to={Paths.SETTINGS}>
+        <Button color="minor" variant='link' className='px-0'>
+          User Settings
+        </Button>
+      </NavLink>
+    </div>
   )
 }
 

@@ -42,6 +42,7 @@ module.exports = {
         secondary: "#101010",
         disabled: "#666",
         major: "#00FF00",
+        minor: "#7c3aed",
         sage: "#a3ff84",
         mist: "#90a299",
         tarantula: "#111815",

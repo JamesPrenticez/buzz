@@ -13,3 +13,6 @@ export const navigationItemsForHomepage: INavigationItem[] = [
 ];
 
 export const navigationItemsForAuthenticedUsers: INavigationItem[] = [];
+
+export const ACCESS_TOKEN = "access"
+export const REFRESH_TOKEN = "refresh"

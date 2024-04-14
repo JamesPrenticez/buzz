@@ -1,1 +1,1 @@
-export * from './fucker'
+export * from './project'

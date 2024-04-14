@@ -1,6 +1,5 @@
 import React, { ReactNode, useState, type ReactElement } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { navigationItemsForAuthenticedUsers, navigationItemsForHomepage } from "../../../constants";
 import { Paths } from "@models";
 import { Button } from "@components/ui";
 // import { capitalizeFirstLetter } from "@utils";
@@ -9,6 +8,7 @@ import RightNav from "./RightNav";
 import Hamburger from "./Hamburger";
 import CompanyLogo from "./CompanyLogo";
 import CompanyName from "./CompanyName";
+import { navigationItemsForAuthenticedUsers, navigationItemsForHomepage } from "@constants";
 
 function Navbar(): ReactElement {
   const location = useLocation();

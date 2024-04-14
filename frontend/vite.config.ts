@@ -35,7 +35,7 @@ export default defineConfig({
         { find: '@mocks', replacement: '/src/mocks' },
         { find: '@redux', replacement: '/src/redux' },
         { find: '@utils', replacement: '/src/utils' },
-        { find: '@constants', replacement: '/src/constants' },
+        { find: '@fucker', replacement: '/src/fucker' },
       ],
     }),
   ],

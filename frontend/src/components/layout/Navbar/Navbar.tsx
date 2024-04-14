@@ -2,13 +2,13 @@ import React, { ReactNode, useState, type ReactElement } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Paths } from "@models";
 import { Button } from "@components/ui";
-// import { capitalizeFirstLetter } from "@utils";
+import { capitalizeFirstLetter } from "@util";
 
 import RightNav from "./RightNav";
 import Hamburger from "./Hamburger";
 import CompanyLogo from "./CompanyLogo";
 import CompanyName from "./CompanyName";
-import { navigationItemsForAuthenticedUsers, navigationItemsForHomepage } from "@constants";
+import { navigationItemsForAuthenticedUsers, navigationItemsForHomepage } from "@constant";
 
 function Navbar(): ReactElement {
   const location = useLocation();
@@ -27,8 +27,7 @@ function Navbar(): ReactElement {
             <li key={page.name}>
               <NavLink to={page.path} tabIndex={-1}>
                 <Button variant="link" color="muted" className="p-0">
-                  adsf
-                  {/* {capitalizeFirstLetter(page.name)} */}
+                  {capitalizeFirstLetter(page.name)}
                 </Button>
               </NavLink>
             </li>

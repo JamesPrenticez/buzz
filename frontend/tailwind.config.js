@@ -92,12 +92,16 @@ module.exports = {
         moss: "#2d422d ",
       },
       height: {
-        "screen-5rem": "calc(100vh - 5rem)",
         "screen-4rem": "calc(100vh - 4rem)",
+        "screen-5rem": "calc(100vh - 5rem)",
       },
 			minHeight:{
-        "screen-5rem": "calc(100vh - 5rem)",
         "screen-4rem": "calc(100vh - 4rem)",
+        "screen-5rem": "calc(100vh - 5rem)",
+      },
+			maxHeight:{
+        "screen-4rem": "calc(100vh - 4rem)",
+        "screen-5rem": "calc(100vh - 5rem)",
       },
 			fontFamily: {
         'sans': ['Arial']

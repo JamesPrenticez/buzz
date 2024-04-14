@@ -4,4 +4,16 @@
 
 html {
   font-family: 'Inter', Courier, monospace;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  height: 5px;
+  width: 8px;
+  background:  #2d422d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0f0 0%, #a3ff84 100%);
+  -webkit-border-radius: 1ex;
 }

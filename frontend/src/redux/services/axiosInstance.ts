@@ -46,7 +46,7 @@ if (useMockData) {
   const mockRefreshToken = await new jose.SignJWT({ "token_type": "refresh", "email": "jamesprenticez@gmail.com" })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime('1h')
+    .setExpirationTime('24h')
     .sign(new TextEncoder().encode('your_secret_key_goes_here'))
   
   // console.log(mockAccessToken, jose.decodeJwt(mockAccessToken))

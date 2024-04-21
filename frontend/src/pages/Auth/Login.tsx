@@ -38,7 +38,7 @@ function Login() {
     password: v.required().string(),
   })
 
-  const initialState = {
+  const initialState: ILoginDeatils = {
     email: "",
     password: ""
   }
@@ -178,7 +178,6 @@ function Login() {
                 <ArrowLeftIcon width={18} strokeWidth={2} className="ml-2 rotate-[120deg]"/>
               </Button>
             </NavLink>
-
 
           </div>
         </form> 

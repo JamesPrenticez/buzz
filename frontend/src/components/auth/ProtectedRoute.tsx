@@ -1,4 +1,4 @@
-import React, { type ReactElement, useEffect } from "react";
+import React, { type ReactElement, ReactNode, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "@constant";
@@ -7,6 +7,8 @@ import { useRefreshAccessTokenMutation } from "@redux/services/authApi";
 import { useAppDispatch, useAppSelector } from "@redux/hooks";
 import { loginUser, logoutUser } from "@redux/slices";
 import { Paths } from "@models";
+import { useGetUserQuery } from "@redux/services";
+import { Colors } from "@models/colors";
 
 interface Props {
   children: ReactElement;
@@ -57,17 +59,30 @@ function ProtectedRoute({children}: Props): ReactElement{
   }
 
   if(isAuthenticated === false && accessToken){
-    return <Loading fullScreen={true} backgroundColor="#111815" />
+    return <Loading fullScreen={true} backgroundColor={Colors.NIGHT} />
   }
 
   return isAuthenticated ? (
-    console.log("Accepted - access token is present"),
-    children
+    // console.log("Accepted - access token is present"),
+    <WithUserDetails children={children}/>
   ) : (
-    console.log("Rejected - access token not present"),
+    // console.log("Rejected - access token not present"),
     <Navigate to={Paths.LOGIN} />
   )
 
+}
+
+function WithUserDetails({children}: {children: ReactNode}){
+  const { isLoading } = useGetUserQuery();
+
+  // TODO figure out how to call Login and getuserdeatils together?
+  console.log("does this get called?", isLoading)
+  
+  if(isLoading){
+    return <Loading fullScreen={true} backgroundColor={Colors.NIGHT} />
+  }
+
+  return children;
 }
 
 export default ProtectedRoute;

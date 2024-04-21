@@ -79,7 +79,7 @@ interface NavbarWrapperProps {
 
 const NavbarWrapper = ({children}: NavbarWrapperProps) => {
   return (
-    <div className="bg-tarantula border-b h-[4rem] md:h-[5rem] flex font-[inter] font-[400] text-[16px] px-4">
+    <div className="bg-tarantula h-[4rem] md:h-[5rem] flex font-[inter] font-[400] text-[16px] px-4">
       <div className="flex items-center justify-between max-w-7xl w-full mx-auto">
         {children}
       </div>

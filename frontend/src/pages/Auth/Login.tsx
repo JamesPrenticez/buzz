@@ -13,7 +13,7 @@ import { useForm, createValidationSchema, resolver, v } from "@util/formValidati
 import { useAppSelector } from "@redux/hooks";
 import { useLoginMutation, useTokenMutation } from "@redux/services/authApi";
 
-import { Paths, ILoginDeatils, IErrorResult, ISuccessResult } from "@models";
+import { Paths, ILoginDeatils } from "@models";
 import { Loading } from "@components/common";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@constant";
 
@@ -26,7 +26,6 @@ function Login() {
   const [invalidCredentials, setInvalidCredentials] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(isAuthenticated)
   // Redirect if user already logged in
   useEffect(() => {
     if (isAuthenticated) {

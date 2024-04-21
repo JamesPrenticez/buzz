@@ -58,7 +58,12 @@ if (useMockData) {
   // User Details
   mockAxiosInstance.onGet(`user/${userId}`).reply((config) => {
     if (log) console.table({method: config.method, endpoint: config.url, params: config.params})
-    return [200, {data: mockUsers[0]}]
+    console.log("here")
+    return [200, { 
+      data: {
+        data: mockUsers[0]
+      }
+    }]
   });
 
   //============================================

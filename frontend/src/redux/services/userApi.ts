@@ -9,12 +9,12 @@ const user_id = getUserId();
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getUser: builder.query<ISuccessResult<IUser>, void>({
+    getUser: builder.query<ISuccessResult<{ data: IUser }>, void>({
       query: () => ({ 
         url: `user/${user_id}`,
         method: 'GET',
         queryKey: 'getUser',
-        providesTags: ['User']
+        providesTags: ['user']
       })
     }), 
     updateUserDetails: builder.mutation<IUser, Partial<IUser> | { key: keyof IUser, value: any }>({

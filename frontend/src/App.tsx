@@ -11,29 +11,27 @@ import { Fallback, Layout } from '@components/layout';
 import { 
   Home,
   Login,
-  UserSettings
+  Logout,
+  Register,
+  UserSettings,
+  NotFound,
 } from '@pages';
 
 const App = () => {
-  const {isLoading: isUserLoading } = useGetUserQuery();
-
-  if(isUserLoading){
-    return (
-      <Loading fullScreen={true} backgroundColor="#111815"/>
-    )
-  }
-
   return (
     <Suspense fallback={<Fallback />}>
       <Layout>
         <Routes>
           <Route path={Paths.HOME} element={<Home />} />
           <Route path={Paths.LOGIN} element={<Login />} />
+          <Route path={Paths.LOGOUT} element={<Logout />} />
+          <Route path={Paths.REGISTER} element={<Register />} />
           <Route path={Paths.SETTINGS} element={
             <ProtectedRoute>
               <UserSettings />
             </ProtectedRoute>
           }/>
+          <Route path={Paths.NOT_FOUND} element={<NotFound />}></Route>
         </Routes>
       </Layout>
     </Suspense>

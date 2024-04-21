@@ -1,7 +1,2 @@
-export interface IAccessToken {
-  accessToken: string;
-}
-
-export interface IRefreshToken {
-  refreshToken: string;
-}
+export type IAccessToken = string;
+export type IRefreshToken = string;

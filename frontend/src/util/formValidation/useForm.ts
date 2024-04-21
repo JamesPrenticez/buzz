@@ -32,7 +32,6 @@ export function useForm<T>({
     if (!fieldKey) {
       throw new Error("please provide a name or id attribute for your input");
     }
-
     const newValue = e.target.value as unknown as T[keyof T];
 
     const updatedFormData = {

@@ -3,14 +3,29 @@ import { ISuccessResult, ILoginDeatils, IUser, IRegisterDeatils, IRefreshToken, 
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    refreshAccessToken: builder.mutation<ISuccessResult<IAccessToken>, IRefreshToken>({
-      query: () => ({ 
-        url: 'token/refresh',
-        method: 'GET',
+    refreshAccessToken: builder.mutation<ISuccessResult<{access: IAccessToken}>, IRefreshToken>({
+      query: (refresh) => ({ 
+        url: '/token/refresh',
+        method: 'POST',
+        data: {
+          refresh: refresh,
+        },
         queryKey: 'refreshToken',
       })
     }), 
-    login: builder.mutation<ISuccessResult<IUser>, ILoginDeatils>({
+    // TODO replace token with login that returns user details all in one api call
+    token: builder.mutation<ISuccessResult<{access: IAccessToken, refresh: IRefreshToken}>, ILoginDeatils>({
+      query: ({ email, password }) => ({
+        url: '/token',
+        method: 'POST',
+        data: {
+          email: email,
+          password: password
+        },
+        queryKey: 'token',
+      }),
+    }),
+    login: builder.mutation<ISuccessResult<{data: IUser, accessToken: IAccessToken, refreshToken: IRefreshToken}>, ILoginDeatils>({
       query: ({ email, password }) => ({
         url: '/login',
         method: 'POST',
@@ -18,7 +33,7 @@ export const authApi = baseApi.injectEndpoints({
           email: email,
           password: password
         },
-        queryKey: 'login',
+        queryKey: 'user',
       }),
     }),
     register: builder.mutation<ISuccessResult<IUser>, IRegisterDeatils>({
@@ -37,6 +52,7 @@ export const authApi = baseApi.injectEndpoints({
 
 export const { 
   useRefreshAccessTokenMutation,
+  useTokenMutation,
   useLoginMutation,
   useRegisterMutation,
 } = authApi;

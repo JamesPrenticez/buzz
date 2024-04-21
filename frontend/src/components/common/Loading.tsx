@@ -7,6 +7,7 @@ interface LoadingProps {
   fontSize?: string;
   text?: string;
   fullScreen?: boolean;
+  isLoading?: boolean;
 }
 
 function Loading({
@@ -16,11 +17,12 @@ function Loading({
   fontSize = "1rem",
   text = "Loading",
   fullScreen = false,
+  isLoading = true,
 }: LoadingProps): ReactElement {
   return (
     <div
       style={{
-        display: "flex",
+        display: isLoading ? "flex" : "none",
         position: `${fullScreen ? "absolute" : "static"}`,
         top: `${fullScreen ? "0" : ""}`,
         left: `${fullScreen ? "0" : ""}`,

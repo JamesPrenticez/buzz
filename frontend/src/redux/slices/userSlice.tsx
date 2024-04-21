@@ -3,9 +3,12 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { IUser } from '@models';
 import { userApi } from '@redux/services';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '@constant';
+import { authApi } from '@redux/services/authApi';
 
 export interface UserState {
   data: IUser;
+  isAuthenticated: boolean;
 }
 
 const initialState: UserState = {
@@ -13,8 +16,9 @@ const initialState: UserState = {
     id: "",
     email: "",
     dateCreated: "",
-    lastModified: ""
+    lastModified: "",
   },
+  isAuthenticated: false
 };
 
 export const userSlice = createSlice({
@@ -34,25 +38,40 @@ export const userSlice = createSlice({
         }
       }
     },
+    loginUser(state) {
+      // TODO intergrate with getUserDetails
+      state.isAuthenticated = true;
+    },
     logoutUser(state) {
-      state.data = {} as IUser;
+      state.data = {
+        id: "",
+        email: "",
+        dateCreated: "",
+        lastModified: "",
+      } as IUser;
+      state.isAuthenticated = false;
+      localStorage.removeItem(ACCESS_TOKEN);
+      localStorage.removeItem(REFRESH_TOKEN);
+      // localStorage.clear(); - we dont want to delete everything
     },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
       (action) => {
         return (
+          authApi.endpoints.login.matchFulfilled(action) ||
           userApi.endpoints.getUser.matchFulfilled(action)
         );
       },
       (state, action) => {
-        state.data = action.payload.data;
+        state.data = action.payload.data.data;
       }
     );
   },
 });
 
 export const { 
+  loginUser,
   logoutUser,
   updateUser,
   updateUserField

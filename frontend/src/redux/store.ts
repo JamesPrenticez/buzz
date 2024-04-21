@@ -17,7 +17,7 @@ export const store = configureStore({
     getDefaultMiddleware().concat(
       baseApi.middleware,
     ), 
-    devTools: process.env.NODE_ENV !== 'development' ? false : true,
+    // devTools: process.env.NODE_ENV !== 'development' ? false : true,
 });
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors

@@ -12,7 +12,7 @@ import { navigationItemsForAuthenticedUsers, navigationItemsForHomepage } from "
 
 function Navbar(): ReactElement {
   const location = useLocation();
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
 
   if(location.pathname === "/"){
     return (

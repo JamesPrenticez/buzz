@@ -15,8 +15,8 @@ python manage.py runserver
 
 ## Setup Python Enviroment
 python -m venv env
-pip install -r requirements.txt
 . env/Scripts/activate
+pip install -r requirements.txt
 django-admin startproject backend
 cd backend 
 python manage.py startapp api

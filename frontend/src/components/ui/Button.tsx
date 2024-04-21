@@ -32,12 +32,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
       link: "text-muted hover:text-white transistion-all ease-in-out duration-200"
     },
     success: {
-      outlined: "border-2 border-green-600",
-      filled: "bg-green-600 hover:bg-green-600/80"
+      outlined: "border-2 border-green-600 ",
+      filled: "bg-green-600 hover:bg-green-600/80 font-semibold transistion-all ease-in-out duration-200 border-b-[3px] border-green-900/50"
     },
     error: {
-      outlined: "border-2 border-red-600",
-      filled: "bg-red-600 hover:bg-red-600/80"
+      outlined: "border-2 border-red-600 text-red-500 hover:bg-red-500 hover:text-tarantula font-bold transistion-all ease-in-out duration-200",
+      filled: "bg-red-600 hover:bg-red-600/80 text-white font-semibold border-b-[3px] border-red-900/50"
     },
     major: {
       outlined: "border-2 border-major",

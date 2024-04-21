@@ -5,6 +5,7 @@ import {
 } from '@mocks';
 import { getUserId } from './getUserId';
 import { ACCESS_TOKEN } from '@constant';
+import * as jose from 'jose';
 
 const useMockData = true //import.meta.env.VITE_ENV === "development" ? true : false;
 const log = false;
@@ -32,8 +33,24 @@ axiosInstance.interceptors.request.use(
 )
 
 if (useMockData) {
+  console.log("using mock data")
   const mockAxiosInstance = new MockAdapter(axiosInstance, { delayResponse: 1500 });
   const userId = getUserId();
+
+  const mockAccessToken = await new jose.SignJWT({ "token_type": "access", "email": "jamesprenticez@gmail.com" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime('30m')
+    .sign(new TextEncoder().encode('your_secret_key_goes_here'))
+  
+  const mockRefreshToken = await new jose.SignJWT({ "token_type": "refresh", "email": "jamesprenticez@gmail.com" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime('1h')
+    .sign(new TextEncoder().encode('your_secret_key_goes_here'))
+  
+  // console.log(mockAccessToken, jose.decodeJwt(mockAccessToken))
+  // console.log(mockRefreshToken, jose.decodeJwt(mockRefreshToken))
 
   //============================================
   // GET
@@ -47,9 +64,50 @@ if (useMockData) {
   //============================================
   // POST
   //============================================
+  // LOGIN
   mockAxiosInstance.onPost('/login').reply((config) => {
-    console.log(`Login request made with ${config.data}!`)
-    return [200, {data: mockUsers[0]}];
+    console.log(`Request to /api/login request made with ${config.data}! (aka Login)`)
+
+    if(JSON.parse(config.data).email !== "jamesprenticez@gmail.com") {
+      return [401, {message: "invalid credentials"}]
+    }
+
+    return [200, {
+      data: {
+        data: mockUsers[0],
+        refreshToken: mockRefreshToken,
+        accessToken: mockAccessToken
+      }
+    }];
+  })
+
+  mockAxiosInstance.onPost('/token/refresh').reply((config) => {
+    console.log(`Request to /api/token/refresh request made with ${config.data}!`)
+
+    if(JSON.parse(config.data).refresh !== mockRefreshToken){
+      return [401, {message: "refresh token invalid"}]
+    }
+
+    return [200, {
+      data: {
+        access: mockAccessToken
+      }
+    }];
+  })
+
+  mockAxiosInstance.onPost('/token').reply((config) => {
+    console.log(`Request to /api/token request made with ${config.data}! (aka Login)`)
+
+    if(JSON.parse(config.data).email !== "jamesprenticez@gmail.com"){
+      return [401, {message: "invaild credentials"}]
+    }
+
+    return [200, {
+      data: {
+        refresh: mockRefreshToken,
+        access: mockAccessToken
+      }
+    }];
   })
 
   mockAxiosInstance.onPost('/register').reply((config) => {

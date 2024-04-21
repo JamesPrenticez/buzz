@@ -73,11 +73,9 @@ function ProtectedRoute({children}: Props): ReactElement{
 }
 
 function WithUserDetails({children}: {children: ReactNode}){
-  const { isLoading } = useGetUserQuery();
+  const {data: user} = useAppSelector((state) => state.user);
+  const { isLoading } = useGetUserQuery(undefined, {skip: user.email.length > 0});
 
-  // TODO figure out how to call Login and getuserdeatils together?
-  console.log("does this get called?", isLoading)
-  
   if(isLoading){
     return <Loading fullScreen={true} backgroundColor={Colors.NIGHT} />
   }

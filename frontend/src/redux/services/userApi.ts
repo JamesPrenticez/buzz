@@ -13,7 +13,7 @@ export const userApi = baseApi.injectEndpoints({
       query: () => ({ 
         url: `user/${user_id}`,
         method: 'GET',
-        queryKey: 'getUser',
+        queryKey: 'user',
         providesTags: ['user']
       })
     }), 

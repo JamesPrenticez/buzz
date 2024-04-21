@@ -34,6 +34,7 @@ export const authApi = baseApi.injectEndpoints({
           password: password
         },
         queryKey: 'user',
+        providesTags: ['user']
       }),
     }),
     register: builder.mutation<ISuccessResult<IUser>, IRegisterDeatils>({

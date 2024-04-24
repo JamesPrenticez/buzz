@@ -1,0 +1,24 @@
+generator client {
+  provider="prisma-client-js"
+}
+
+datasource db {
+  provider="sqlserver"
+  url=env("PROD_DATABASE_URL")
+}
+
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  passwordHash String
+  firstName String?
+  lastName String?
+  phone String?
+  profilePicture String?
+  locale String?
+  country String?
+  permissions String?
+  subscription String?
+  dateCreated DateTime  @default(now())
+  lastModified DateTime  @updatedAt @default(now())
+}

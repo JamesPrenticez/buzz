@@ -9,10 +9,12 @@ import Hamburger from "./Hamburger";
 import CompanyLogo from "./CompanyLogo";
 import CompanyName from "./CompanyName";
 import { navigationItemsForAuthenticedUsers, navigationItemsForHomepage } from "@constant";
+import { useAppSelector } from "@redux/hooks";
 
 function Navbar(): ReactElement {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
+  const { data: user, isAuthenticated } = useAppSelector((state) => state.user);
 
   if(location.pathname === "/"){
     return (
@@ -35,16 +37,28 @@ function Navbar(): ReactElement {
         </ul>
 
         <div>
-          <NavLink to={Paths.LOGIN}>
-            <Button variant="link" color="muted" className="ml-auto px-4">
-              Login
-            </Button>
-          </NavLink>
-          <NavLink to={Paths.REGISTER}>
-            <Button color="cta" className="px-4 font-[500]">
-              Get Started
-            </Button>
-          </NavLink>
+          {!isAuthenticated && user.email !== "" ? (
+            <>
+              <NavLink to={Paths.LOGIN}>
+                <Button variant="link" color="muted" className="ml-auto px-4">
+                  Login
+                </Button>
+              </NavLink>
+              <NavLink to={Paths.REGISTER}>
+                <Button color="cta" className="px-4 font-[500]">
+                  Get Started
+                </Button>
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink to={Paths.SETTINGS}>
+                <Button variant="link" color="muted" className="ml-auto px-4">
+                  {user.email}
+                </Button>
+              </NavLink>
+            </>
+          )}
         </div>
       </NavbarWrapper>
     )

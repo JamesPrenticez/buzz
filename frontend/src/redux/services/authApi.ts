@@ -37,7 +37,7 @@ export const authApi = baseApi.injectEndpoints({
         providesTags: ['user']
       }),
     }),
-    register: builder.mutation<ISuccessResult<IUser>, IRegisterDeatils>({
+    register: builder.mutation<ISuccessResult<{message: string}>, IRegisterDeatils>({
       query: ({ email, password }) => ({
         url: '/register',
         method: 'POST',

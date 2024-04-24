@@ -8,12 +8,12 @@ const Home = () => {
   return (
     <div>
       <NavLink to={Paths.SETTINGS}>
-        <Button color="minor" variant='link' className='px-0'>
+        <Button color="minor" variant="link" className='px-0'>
           User Settings
         </Button>
       </NavLink>
 
-      <div>
+    <div>
 
 
 <ButtonShine variant='filled' color="info">

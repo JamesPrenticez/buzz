@@ -33,11 +33,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     },
     success: {
       outlined: "border-2 border-green-600 ",
-      filled: "bg-green-600 hover:bg-green-600/80 font-semibold transistion-all ease-in-out duration-200 border-b-[3px] border-green-900/50"
+      filled: "bg-green-600 hover:bg-green-600/80 font-semibold transistion-all ease-in-out duration-200 border-b-[4px] border-green-900/50"
     },
     error: {
       outlined: "border-2 border-red-600 text-red-500 hover:bg-red-500 hover:text-tarantula font-bold transistion-all ease-in-out duration-200",
-      filled: "bg-red-600 hover:bg-red-600/80 text-white font-semibold border-b-[3px] border-red-900/50"
+      filled: "bg-red-600 hover:bg-red-600/80 text-white font-semibold border-b-[4px] border-red-900/50"
     },
     major: {
       outlined: "border-2 border-major",
@@ -45,8 +45,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     },
     minor: {
       outlined: "border-2 border-minor",
-      filled: "bg-minor hover:bg-minor/80",
-      link: "text-minor hover:text-minor/80 transistion-all ease-in-out duration-200"
+      filled: "bg-minor hover:bg-minor/80 font-semibold transistion-all ease-in-out duration-200 border-b-[4px] border-purple-900/50",
+      link: "text-[#df91fe] hover:text-[#ca5cdd] transistion-all ease-in-out duration-200"
     },
     info: {
       outlined: "border-2 border-blue-600",
@@ -54,7 +54,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     },
     cta: {
       outlined: "border-2",
-      filled: "bg-gradient-to-br from-sage to-major hover:from-sage/110 hover:to-major/110 text-tarantula"
+      filled: "bg-gradient-to-br from-sage to-major hover:from-sage/110 hover:to-major/110 text-tarantula",
+      link: "text-sage hover:text-sage/50 transistion-all ease-in-out duration-200"
     },
   };
 

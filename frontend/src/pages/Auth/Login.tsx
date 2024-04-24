@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import React, { useEffect, useState, type ReactElement } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import { 
   Label,
@@ -11,16 +11,16 @@ import { ArrowLeftIcon, EyeClosedIcon, EyeOpenIcon, InfoIcon } from "@components
 import { useForm, createValidationSchema, resolver, v } from "@util/formValidation";
 
 import { useAppSelector } from "@redux/hooks";
-import { useLoginMutation, useTokenMutation } from "@redux/services/authApi";
+import { useLoginMutation } from "@redux/services/authApi";
 
 import { Paths, ILoginDeatils } from "@models";
 import { Loading } from "@components/common";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@constant";
+import AuthFormWrapper from "./AuthFormWrapper";
 
-function Login() {
+function Login(): ReactElement {
   const navigate = useNavigate();
   const [login] = useLoginMutation();
-  // TODO const [token] = useTokenMutation();
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
   const [showPassword, setShowPassword] = useState(false);
   const [invalidCredentials, setInvalidCredentials] = useState(false);
@@ -60,7 +60,6 @@ function Login() {
     setIsLoading(true);
     
     try {
-      // TODO const res = await token(formData).unwrap();
       const res = await login(formData).unwrap();
       localStorage.setItem(ACCESS_TOKEN, res.data.accessToken)
       localStorage.setItem(REFRESH_TOKEN, res.data.refreshToken)
@@ -83,26 +82,8 @@ function Login() {
   }
 
   return (
-    <div className="text-muted p-12">
-      <div className="w-full max-w-[460px] bg-shadow rounded mx-auto overflow-hidden">
-
-        <div className="h-[180px]  relative bg-[url('/bg.jpeg')] bg-cover">
-          <div className="absolute bg-gradient-to-r from-fern to-moss opacity-80 inset-0"/> 
-
-          <div className="relative w-full h-full flex flex-col items-center justify-center">
-            <h1 className="text-2xl font-bold text-white">Welcome Back!</h1>
-            <p className="">Sign in to continue your journey!</p>
-            <div className="flex items-center justify-center w-[80px] h-[80px] rounded-full bg-shadow absolute bottom-[-40px]">
-              <NavLink to={Paths.HOME} className="w-[60%] h-[60%]">
-                <div className="rounded-full">
-                  <img src="/logo.svg" className="rounded-full" alt="" />
-                </div>
-              </NavLink>
-            </div>
-          </div>
-        </div> 
-
-        <form className="p-6">
+    <AuthFormWrapper title="Welcome Back!" subTitle="Sign in to continue your journey!">
+      <form className="p-6">
           <div className="flex items-center">
             <span className="ml-auto cursor-pointer hover:text-sage">
               <InfoIcon width={24} onClick={() => autoFillDetails()}/>
@@ -158,7 +139,7 @@ function Login() {
 
           <Button 
             color="success"
-            className="w-full mt-2 bg-green-600 relative"
+            className="w-full mt-2 relative"
             onClick={handleSubmit}
           >
             Sign In
@@ -172,18 +153,17 @@ function Login() {
             <NavLink to={Paths.REGISTER}>
               <Button 
                 variant="link"
-                className="flex items-center text-sage font-bold"
+                color="cta"
+                className="flex items-center"
               >
                 Register now
                 <ArrowLeftIcon width={18} strokeWidth={2} className="ml-2 rotate-[120deg]"/>
               </Button>
             </NavLink>
-
           </div>
-        </form> 
-
-      </div>
-    </div>
+          
+      </form> 
+    </AuthFormWrapper>
   );
 }
 

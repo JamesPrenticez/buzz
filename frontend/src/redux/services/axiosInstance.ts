@@ -100,24 +100,10 @@ if (useMockData) {
     }];
   })
 
-  mockAxiosInstance.onPost('/token').reply((config) => {
-    console.log(`Request to /api/token request made with ${config.data}! (aka Login)`)
-
-    if(JSON.parse(config.data).email !== "jamesprenticez@gmail.com"){
-      return [401, {message: "invaild credentials"}]
-    }
-
-    return [200, {
-      data: {
-        refresh: mockRefreshToken,
-        access: mockAccessToken
-      }
-    }];
-  })
-
+  // Register
   mockAxiosInstance.onPost('/register').reply((config) => {
     console.log(`Register request made with ${config.data}!`)
-    return [200, {data: mockUsers[0]}];
+    return [200, { message: "success" }];
   })
 
   mockAxiosInstance.onPost('/user').reply((config) => {

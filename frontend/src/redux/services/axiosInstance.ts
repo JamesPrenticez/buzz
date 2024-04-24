@@ -7,7 +7,7 @@ import { getUserId } from './getUserId';
 import { ACCESS_TOKEN } from '@constant';
 import * as jose from 'jose';
 
-const useMockData = true //import.meta.env.VITE_ENV === "development" ? true : false;
+const useMockData = false //import.meta.env.VITE_ENV === "development" ? true : false;
 const log = false;
 
 export const axiosInstance = axios.create({

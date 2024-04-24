@@ -7,10 +7,8 @@ Authentication boilerplate
 # Backend
 ## Running the App (after setup)
 ```bash
-. env/Scripts/activate
-```
-```bash
-python manage.py runserver
+  . env/Scripts/activate
+  python manage.py runserver
 ```
 
 ## Setup Python Enviroment

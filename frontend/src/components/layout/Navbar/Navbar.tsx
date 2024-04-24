@@ -37,7 +37,7 @@ function Navbar(): ReactElement {
         </ul>
 
         <div>
-          {!isAuthenticated && user.email !== "" ? (
+          {!isAuthenticated && user.email === "" ? (
             <>
               <NavLink to={Paths.LOGIN}>
                 <Button variant="link" color="muted" className="ml-auto px-4">

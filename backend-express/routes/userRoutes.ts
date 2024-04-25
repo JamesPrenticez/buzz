@@ -5,7 +5,7 @@ import { validateJWT } from '../utils';
 
 const router = express.Router();
 
-router.get('/api/user/:id', validateJWT, userController.getUser);
+router.get('/api/user/details', validateJWT, userController.getUserDetails);
 
 router.get('/api/users', userController.getAllUsers);
 router.get('/api/habits', habitsController.getUserHabits);

@@ -7,7 +7,7 @@ import { useRefreshAccessTokenMutation } from "@redux/services/authApi";
 import { useAppDispatch, useAppSelector } from "@redux/hooks";
 import { loginUser, logoutUser } from "@redux/slices";
 import { Paths } from "@models";
-import { useGetUserQuery } from "@redux/services";
+import { useGetUserDetailsQuery } from "@redux/services";
 import { Colors } from "@models/colors";
 
 interface Props {
@@ -74,7 +74,7 @@ function ProtectedRoute({children}: Props): ReactElement{
 
 function WithUserDetails({children}: {children: ReactNode}){
   const {data: user} = useAppSelector((state) => state.user);
-  const { isLoading } = useGetUserQuery(undefined, {skip: user.email.length > 0});
+  const { isLoading } = useGetUserDetailsQuery(undefined, {skip: user.email.length > 0});
 
   if(isLoading){
     return <Loading fullScreen={true} backgroundColor={Colors.NIGHT} />

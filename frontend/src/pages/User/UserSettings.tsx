@@ -5,7 +5,7 @@ function UserSettings() {
   const {data: user, isAuthenticated} = useAppSelector((state) => state.user);
 
   return (
-    <div>Welcome {user.firstName} you are {isAuthenticated ? "authenticated" : "not authenticated"}!</div>
+    <div>Welcome {user.email} you are {isAuthenticated ? "authenticated" : "not authenticated"}!</div>
   )
 }
 

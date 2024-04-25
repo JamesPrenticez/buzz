@@ -9,9 +9,9 @@ const user_id = getUserId();
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getUser: builder.query<ISuccessResult<{ data: IUser }>, void>({
+    getUserDetails: builder.query<ISuccessResult<{ data: IUser }>, void>({
       query: () => ({ 
-        url: `user/${user_id}`,
+        url: 'user/details',
         method: 'GET',
         queryKey: 'user',
         providesTags: ['user']
@@ -53,6 +53,6 @@ export const userApi = baseApi.injectEndpoints({
 });
 
 export const { 
-  useGetUserQuery,
+  useGetUserDetailsQuery,
   useUpdateUserDetailsMutation
 } = userApi;

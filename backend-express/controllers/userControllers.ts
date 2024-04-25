@@ -3,16 +3,16 @@ import { User } from '@prisma/client';
 import prisma from '../prisma';
 
 // Get all users
-export const getUser = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
+export const getUserDetails = async (req: Request & { email?: string }, res: Response): Promise<void> => {
+  const userEmail = req.email; // Get email from request object which is ripped from JWT token
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { id },
+    const user: any = await prisma.user.findUnique({
+      where: { email: userEmail },
     });
 
     if (!user) {
-      res.status(404).json({ message: `User with id ${id} not found` });
+      res.status(404).json({ message: `User with email ${userEmail} not found` });
       return;
     }
 
@@ -35,13 +35,13 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({
       data: {
-        userData
+        data: userData
       },
     });
   } catch (err) {
-    console.error(`Error fetching user with id ${id}:`, err);
+    console.error(`Error fetching user with email ${userEmail}:`, err);
     res.status(500).json({
-      message: `An error occurred while fetching user with id ${id}`,
+      message: `An error occurred while fetching user with email ${userEmail}`,
     });
   }
 };

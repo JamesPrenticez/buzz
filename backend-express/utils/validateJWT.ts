@@ -1,10 +1,19 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
-export const validateJWT = (req: Request, res: Response, next: NextFunction): void | Response<any>=> {
- 
-  const JWTCookie = req.cookies.JWT_TOKEN;
-  const token = JWTCookie && JWTCookie.split(' ')[1];
+export const validateJWT = (req: Request & { email?: string }, res: Response, next: NextFunction): void | Response<any>=> {
+  // When using HTTPS only we get from a cookie
+  // const JWTCookie = req.cookies.JWT_TOKEN;
+  // const token = JWTCookie && JWTCookie.split(' ')[1];
+
+  // When not using HTTPS only we get from a header
+  const authorizationHeader = req.headers.authorization;
+
+  if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+    return res.sendStatus(401);
+  }
+
+  const token = authorizationHeader.split(' ')[1];
 
   const SECRET_KEY = "your_secret_key_goes_here"
 
@@ -18,7 +27,7 @@ export const validateJWT = (req: Request, res: Response, next: NextFunction): vo
       return res.sendStatus(403);
     } else {
       // Token is valid, attach decoded payload to request object
-      // req.user = decoded;
+      req.email = decoded.email; // Attach email to request object
       next();
     }
   });

@@ -61,6 +61,7 @@ function Login(): ReactElement {
     
     try {
       const res = await login(formData).unwrap();
+      console.log(res)
       localStorage.setItem(ACCESS_TOKEN, res.data.accessToken)
       localStorage.setItem(REFRESH_TOKEN, res.data.refreshToken)
       navigate(Paths.SETTINGS);

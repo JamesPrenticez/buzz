@@ -16,7 +16,7 @@ export const axiosInstance = axios.create({
     Accept: 'application/json',
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // this enables us to send a HTTPOnly cookie automagically for JWT authentication
+  // withCredentials: true, // this enables us to send a HTTPOnly cookie automagically for JWT authentication
 });
 
 axiosInstance.interceptors.request.use(
@@ -56,9 +56,13 @@ if (useMockData) {
   // GET
   //============================================
   // User Details
-  mockAxiosInstance.onGet(`user/${userId}`).reply((config) => {
+  mockAxiosInstance.onGet('user/deatils').reply((config) => {
     if (log) console.table({method: config.method, endpoint: config.url, params: config.params})
-    console.log("calling api/user/id")
+    console.log("calling api/user/details")
+
+    // Rip the user email from access token
+    // find user based on that
+
     return [200, { 
       data: {
         data: mockUsers[0]

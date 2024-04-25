@@ -6,6 +6,7 @@ import { createHashedPassword, verifyPassword } from '../utils';
 
 // const secret = process.env.SECRET_KEY 
 
+// Login
 export const login = async (req: Request, res: Response): Promise<any> => {  
   const { email, password } = req.body;
 
@@ -16,7 +17,8 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 
     if (user && await verifyPassword(password, user.passwordHash)) {
       // Generate a JWT token
-      const token = jwt.sign({ username: user.email, userId: user.id }, "your_secret_key_goes_here", { expiresIn: '1h' });
+      const accessToken = jwt.sign({ email: user.email, id: user.id }, "your_secret_key_goes_here", { expiresIn: '30m' });
+      const refreshToken = jwt.sign({ email: user.email, id: user.id }, "your_secret_key_goes_here", { expiresIn: '24h' });
       
       // Destructure user object and replace null values with empty strings
       const { firstName, lastName, phone, profilePicture, locale, country, permissions, subscription, dateCreated, lastModified } = user || {};
@@ -36,25 +38,43 @@ export const login = async (req: Request, res: Response): Promise<any> => {
         lastModified: lastModified ?? ''
       };
 
-      // Set JWT token as cookie and return user data
-      return res.status(200).cookie('JWT_TOKEN', `Bearer ${token}`, {
-        secure: true,
-        httpOnly: true,
-        sameSite: 'strict'
-      }).json({data: userData});
+      // HTTPS is lie - client has to be able to read it
+      // // Set access token as HTTP-only cookie
+      // read comment here
+      // https://stackoverflow.com/questions/76097637/protected-routes-in-react-using-httponly-jwt
+
+      // res.cookie('access_token', accessToken, {
+      //   httpOnly: true,
+      //   secure: true, // Set to true if your application is served over HTTPS
+      //   sameSite: 'strict', // Helps prevent CSRF attacks
+      //   expires: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes
+      // });
+
+      // // Set refresh token as HTTP-only cookie
+      // res.cookie('refresh_token', refreshToken, {
+      //   httpOnly: true,
+      //   secure: true, // Set to true if your application is served over HTTPS
+      //   sameSite: 'strict', // Helps prevent CSRF attacks
+      //   expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+      // });
+
+      // Return user data
+      return res.status(200).json({data: { 
+        data: userData,
+        accessToken: accessToken,
+        refreshToken: refreshToken
+      }});
     } else {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
-
   } catch (err) {
     return res.status(500).json({ message: 'Internal server error'});
   }
 };
 
-// SignUp
-export const register = async (req: Request, res: Response): Promise<any> => {
+// Register
+export const register = async (req: Request, res: Response): Promise<any> => {  
   const { email, password } = req.body;
-  console.log(email, password)
 
   try {
     // Check if the username is already taken
@@ -62,10 +82,8 @@ export const register = async (req: Request, res: Response): Promise<any> => {
       where: { email },
     });
 
-    console.log(0)
-
     if (existingUser) {
-      return res.status(400).json({ error: 'Email is already taken' });
+      return res.status(409).json({ error: 'Email is already taken' });
     }
 
     // Create a hashed password
@@ -79,44 +97,11 @@ export const register = async (req: Request, res: Response): Promise<any> => {
       },
     });
 
-    // Get that user after creation
-    const user = await prisma.user.findUnique({
-      where: {
-        email: newUser.email,
-      },
-    });
-
-    // Destructure user object and replace null values with empty strings
-    const { firstName, lastName, phone, profilePicture, locale, country, permissions, subscription, dateCreated, lastModified } = user || {};
-
-    // Set default values for properties that might be null
-    const userData = {
-      firstName: firstName ?? '',
-      lastName: lastName ?? '',
-      email,
-      phone: phone ?? '',
-      profilePicture: profilePicture ?? '',
-      locale: locale ?? '',
-      country: country ?? '',
-      permissions: permissions ?? [],
-      subscription: subscription ?? '',
-      dateCreated: dateCreated ?? '',
-      lastModified: lastModified ?? ''
-    };
-
-    // Generate a JWT token for the newly registered user
-    const token = jwt.sign({ email: newUser.email, userId: newUser.id }, "your_secret_key_goes_here", { expiresIn: '1h' });
-
-    // Set JWT token as cookie and return user data
-    return res.status(200).cookie('JWT_TOKEN', `Bearer ${token}`, {
-      secure: true,
-      httpOnly: true,
-      sameSite: 'strict'
-    }).json({data: userData });
+    // Return a success message along with user data if needed
+    return res.status(201).json({ message: 'User registered successfully', data: newUser });
 
   } catch (err) {
-    res.status(500).json({
-      message: 'Internal server error',
-    });
+    console.error(err);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };

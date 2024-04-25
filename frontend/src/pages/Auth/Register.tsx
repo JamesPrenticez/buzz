@@ -22,7 +22,8 @@ function Register() {
   const [register] = useRegisterMutation();
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
   const [showPassword, setShowPassword] = useState(false);
-  const [emailAlreadyExists, setEmailAlreadyExists] = useState(false)
+  const [emailAlreadyExists, setEmailAlreadyExists] = useState<boolean>(false)
+  const [internalServerError, setInternalServerError] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false);
 
   // Redirect if user already logged in
@@ -64,8 +65,10 @@ function Register() {
       navigate(Paths.SETTINGS);
       console.log('Login successful. Redirecting...');
     } catch (error: any) {
-      if(error.status === 401){
+      if(error.status === 409){
         setEmailAlreadyExists(true)
+      } else {
+        setInternalServerError(true)
       }
       console.error('Error during login:', error);
     } finally {
@@ -97,10 +100,12 @@ function Register() {
               onChange={(e) => {
                 handleChange(e);
                 if(emailAlreadyExists) setEmailAlreadyExists(false);
+                if(internalServerError) setInternalServerError(false);
               }}
             />
             <ErrorMessage message={formErrors.email.errorMessage}/>
             <ErrorMessage message={emailAlreadyExists ? "Email address already in use." : ""}/>
+            <ErrorMessage message={internalServerError ? "Error - please contact support" : ""}/>
           </Label>
 
           <Label value="Password:" htmlFor="password">

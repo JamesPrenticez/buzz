@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactElement } from 'react';
-import { useCursorPosition, useFocusBlur, useKeyPressed } from '../../hooks';
+import { useCursorPosition, useFocusBlur} from '../../hooks';
 
 type Timer = ReturnType<typeof setTimeout>;
 
@@ -17,8 +17,8 @@ function Countdown(): ReactElement {
   const [isRunning, setIsRunning] = useState<boolean>(false)
   const [remainingTime, setRemainingTime] = useState<number>(0);
 
-  const isEnterKeyPressed = useKeyPressed("enter")
-  const isDeleteKeyPressed = useKeyPressed("delete")
+  // const isEnterKeyPressed = useKeyPressed("enter")
+  // const isDeleteKeyPressed = useKeyPressed("delete")
 
   const { realCursorPosition, updateCaret, setRealCursorPosition } = useCursorPosition(inputRef);
 
@@ -88,23 +88,23 @@ function Countdown(): ReactElement {
   // }, [isActive]);
 
   // Handle Delete Key
-  useEffect(() => {
-    if(isActive){
-      if(isDeleteKeyPressed){
-        setRealCursorPosition(realCursorPosition - 1)
-      } 
-    }
-  }, [isActive, isDeleteKeyPressed ])
+  // useEffect(() => {
+  //   if(isActive){
+  //     if(isDeleteKeyPressed){
+  //       setRealCursorPosition(realCursorPosition - 1)
+  //     } 
+  //   }
+  // }, [isActive, isDeleteKeyPressed ])
 
   // Handle Enter Key
-  useEffect(() => {
+  // useEffect(() => {
 
-    if(isEnterKeyPressed){
-      console.log("enter")
-      // TODO handle blur / is active
-      setIsRunning(true)
-    } 
-  }, [isEnterKeyPressed])
+  //   if(isEnterKeyPressed){
+  //     console.log("enter")
+  //     // TODO handle blur / is active
+  //     setIsRunning(true)
+  //   } 
+  // }, [isEnterKeyPressed])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

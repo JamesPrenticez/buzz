@@ -1,20 +1,21 @@
-import React, { useState, useEffect, ReactElement, type Dispatch, type SetStateAction, ReactNode } from 'react';
-import { useKeyPressed } from "@hooks";
+import React, { useRef, useState, useEffect, ReactElement, type Dispatch, type SetStateAction, ReactNode } from 'react';
 import { CogIcon, PauseIcon, PlayIcon, ResetIcon } from '@components/icons';
+import { observeIntersection } from '@util/observerIntersection';
 
 type Timer = ReturnType<typeof setTimeout>;
 
 function Stopwatch(): ReactElement {
   const [play, setPlay] = useState<boolean>(false);
   const [elapsedTime, setElapsedTime] = useState<number>(59);
-  
   const [timer, setTimer] = useState<Timer>();
-  const isEnterKeyPressed = useKeyPressed("enter")
-
-  const togglePlay = () => {
-    const updatedPlay = !play;
-    setPlay(updatedPlay);
-  };
+  
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    if (containerRef.current) {
+      observeIntersection(containerRef.current, (e) => handleSpacebar(e), "keydown");
+    }
+  }, []);
 
   const startTimer = () => {
     const startTime = Date.now() - elapsedTime * 1000; // Multiply by 1000 to convert seconds to milliseconds
@@ -90,34 +91,36 @@ function Stopwatch(): ReactElement {
     )
   };
 
+  const handleSpacebar = (e: any) => {
+    if(!e) return
+    e.preventDefault();
+    setPlay(prev => !prev)
+  }
+
  return (
-    <div className="flex flex-col items-center justify-center">
+    <div ref={containerRef} className="flex flex-col items-center justify-center">
 
         <div className="" >
           {formatElapsedTime(elapsedTime)}
         </div>
 
         <div className="flex space-x-2 ">
-          {/* <Button csx="bg-orange-500 px-[10px]" onClick={resetTimer}>
-            RESET
-          </Button> */}
-
           <div className='text-gray-300 w-[50px] h-[50px] cursor-pointer hover:text-white bg-black/50 rounded-full flex items-center justify-center mt-auto'>
             <ResetIcon onClick={resetTimer}/>
           </div>
 
           <div className='text-gray-300 w-[70px] cursor-pointer hover:text-white bg-black/50 rounded-full'>
             {play ? 
-              <PauseIcon onClick={togglePlay}/>
+              <PauseIcon onClick={() => setPlay(false)}/>
               : 
-              <PlayIcon onClick={togglePlay}/>
+              <PlayIcon onClick={() => setPlay(true)}/>
             }
           </div>
 
+          {/* Maybe save */}
           <div className='text-gray-300 w-[50px] h-[50px] cursor-pointer hover:text-white bg-black/50 rounded-full flex items-center justify-center mt-auto'>
-            <CogIcon />
+            <CogIcon /> 
           </div>
- 
         </div>
     </div>
   );

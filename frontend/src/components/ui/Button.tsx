@@ -50,7 +50,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     },
     info: {
       outlined: "border-2 border-blue-600",
-      filled: "bg-blue-600 hover:bg-blue-600/80"
+      filled: "bg-blue-600 hover:bg-blue-600/80",
+      link: "text-sky-400 hover:text-sky-500 transistion-all ease-in-out duration-200"
     },
     cta: {
       outlined: "border-2",

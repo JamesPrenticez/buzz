@@ -6,19 +6,24 @@ import { ButtonShine } from '@components/ui/ButtonShine';
 
 const Home = () => {
   return (
-    <div>
+    <div className='flex flex-col'>
       <NavLink to={Paths.SETTINGS}>
-        <Button color="minor" variant="link" className='px-0'>
+        <Button color="info" variant="link" className='px-0'>
           User Settings
+        </Button>
+      </NavLink>
+      <NavLink to={Paths.TIMER}>
+        <Button color="info" variant="link" className='px-0'>
+          Timer
         </Button>
       </NavLink>
 
     <div>
 
 
-<ButtonShine variant='filled' color="info">
+{/* <ButtonShine variant='filled' color="info">
  test
-</ButtonShine>
+</ButtonShine> */}
       </div>
 
 

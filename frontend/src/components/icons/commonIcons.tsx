@@ -95,6 +95,7 @@ export const EyeOpenIcon = (props: SVGProps<SVGSVGElement>): ReactElement => {
     </svg>
   )
 }
+
 export const EyeClosedIcon = (props: SVGProps<SVGSVGElement>): ReactElement => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -102,6 +103,14 @@ export const EyeClosedIcon = (props: SVGProps<SVGSVGElement>): ReactElement => {
       <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/>
       <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/>
       <line x1="2" x2="22" y1="2" y2="22"/>
+    </svg>
+  )
+}
+
+export const CogIcon = (props: SVGProps<SVGSVGElement>): ReactElement => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="50%" height="50%" viewBox="0 0 16 16" fill="currentColor" stroke="none" strokeWidth={1} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M6.6,1.051a1.464,1.464,0,0,1,2.809,0l.1.338a1.463,1.463,0,0,0,1.815.993,1.448,1.448,0,0,0,.29-.122l.311-.169a1.465,1.465,0,0,1,1.988,1.987l-.171.311a1.464,1.464,0,0,0,.585,1.984,1.507,1.507,0,0,0,.288.119l.341.1a1.465,1.465,0,0,1,0,2.81l-.343.1a1.465,1.465,0,0,0-.869,2.105l.169.311a1.466,1.466,0,0,1-1.988,1.989l-.311-.171a1.462,1.462,0,0,0-2.1.873l-.1.341a1.465,1.465,0,0,1-2.809,0l-.1-.343a1.461,1.461,0,0,0-1.818-.988,1.507,1.507,0,0,0-.288.119l-.31.169a1.467,1.467,0,0,1-1.989-1.989l.171-.311a1.463,1.463,0,0,0-.585-1.984,1.58,1.58,0,0,0-.288-.117l-.338-.1a1.465,1.465,0,0,1,0-2.81l.338-.1a1.456,1.456,0,0,0,.873-2.106L2.093,4.08A1.466,1.466,0,0,1,4.08,2.091l.31.172a1.465,1.465,0,0,0,1.985-.586,1.4,1.4,0,0,0,.118-.288ZM11.428,8A3.429,3.429,0,1,0,8,11.43,3.43,3.43,0,0,0,11.428,8Z" />
     </svg>
   )
 }

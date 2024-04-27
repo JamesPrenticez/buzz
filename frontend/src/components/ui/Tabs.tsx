@@ -1,34 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, isValidElement, type ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-interface Props {
-  items: string[];
-  onClick: (name: any) => void;
-  defaultActiveValue?: string;
+// TODO focus-visible
+
+interface TabProps {
+  name: string;
+  className?: string;
+  children: ReactNode;
 }
 
-export function Tabs({ items, onClick, defaultActiveValue }: Props) {
-  const [active, setActive] = useState<string | null>(defaultActiveValue ? defaultActiveValue : null )
+interface Props {
+  children: ReactNode[];
+  className?: string;
+  defaultActiveIndex?: number;
+}
+
+export function Tabs({ children, className, defaultActiveIndex = 0 }: Props) {
+  const [activeIndex, setActiveIndex] = useState<number>(defaultActiveIndex);
+
+  const handleClick = (index: number) => {
+    setActiveIndex(index);
+  };
 
   return (
-    <div className="flex w-full h-full">
-      {items.map((item, index) => (
-        <button 
-          key={index}
-          className={
-            twMerge("grow flex items-center justify-center text-lg text-muted font-bold border-b-2 border-transparent mt-[3px] hover:text-major", 
-            active === item ? "text-major border-major" : "")
-          }
-          onClick={() => { 
-            onClick(item);
-            setActive(item)
-          }}
-        >
-          <div className='px-4 w-full'>
-            {item}
-          </div>
-        </button>
-      ))}
-    </div>
+    <>
+      <div className={twMerge("flex bg-shadow", className)}>
+
+      {children.map((child, index) => {
+        if (!isValidElement(child)) return null;
+        const isActive = index === activeIndex;
+        return (
+          <button
+            key={index}
+            className={twMerge(
+              "grow flex items-center justify-center text-lg text-muted font-bold border-b-2 border-transparent mt-[3px] hover:text-major transition duration-200 ease-in-out",
+              isActive ? "text-major border-major" : ""
+            )}
+            onClick={() => handleClick(index)}
+          >
+            <div className='px-4 w-full'>{(child.props as TabProps).name}</div>
+          </button>
+        );
+      })}
+      </div>
+
+      <div className="bg-shadow">
+        {children[activeIndex]}
+      </div>
+    </>
   );
 }
+
+export function Tab({ children, className }: TabProps) {
+  return <div className={twMerge("", className)}>{children}</div>;
+}
+
+  /**
+   * https://tsdoc.org/
+   * Component allowing switching between tabs
+   *
+   * @remarks
+   * This component provides a user interface for navigating between multiple tabs.
+   *
+   * @param items - An array of tab items.
+   * @param onClick - A function to handle tab clicks.
+   * @param defaultActiveValue - Optional: default active tab value.
+  */

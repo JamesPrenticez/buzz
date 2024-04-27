@@ -11,6 +11,7 @@ import {
   Logout,
   Register,
   UserSettings,
+  TimerPage,
   NotFound,
 } from '@pages';
 
@@ -28,6 +29,7 @@ const App = () => {
               <UserSettings />
             </ProtectedRoute>
           }/>
+          <Route path={Paths.TIMER} element={<TimerPage />}></Route>
           <Route path={Paths.NOT_FOUND} element={<NotFound />}></Route>
         </Routes>
       </Layout>
@@ -35,7 +37,8 @@ const App = () => {
   );
 }
 
-{/*
-<Route path={Paths.REGISTER} element={<Register />} />
-<Route path={Paths.TEST} element={<Test />} /> */}
 export default App;
+
+{/*
+<Route path={Paths.TEST} element={<Test />} /> 
+*/}

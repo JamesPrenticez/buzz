@@ -6,7 +6,7 @@ type Timer = ReturnType<typeof setTimeout>;
 
 function Stopwatch(): ReactElement {
   const [play, setPlay] = useState<boolean>(false);
-  const [elapsedTime, setElapsedTime] = useState<number>(59);
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [timer, setTimer] = useState<Timer>();
   
   const containerRef = useRef<HTMLDivElement>(null);
@@ -18,13 +18,13 @@ function Stopwatch(): ReactElement {
   }, []);
 
   const startTimer = () => {
-    const startTime = Date.now() - elapsedTime * 1000; // Multiply by 1000 to convert seconds to milliseconds
-
+    const startTime = Date.now() - elapsedTime; // Adjust startTime based on the current elapsedTime
+  
     const timerId = setInterval(() => {
       const now = Date.now();
       const elapsed = now - startTime;
-      setElapsedTime(Math.round(elapsed / 1000)); // Round the elapsed time to whole seconds
-    }, 1000);
+      setElapsedTime(elapsed); // Update elapsed time
+    }, 10);
     setTimer(timerId);
     setPlay(true);
   };
@@ -53,13 +53,20 @@ function Stopwatch(): ReactElement {
   }, [play]);
 
   const formatElapsedTime = (time: number): ReactElement => {
-    const hours = Math.floor(time / 3600);
-    const minutes = Math.floor((time % 3600) / 60);
-    const seconds = time % 60;
+    // const hours = Math.floor(time / 3600);
+    // const minutes = Math.floor((time % 3600) / 60);
+    // const seconds = time % 60;
+    // const milliseconds = time % 1000;
+
+    const milliseconds = Math.floor(time % 1000);
+    const seconds = Math.floor((time / 1000) % 60);
+    const minutes = Math.floor((time / (1000 * 60)) % 60);
+    const hours = Math.floor(time / (1000 * 60 * 60));
 
     const formattedHours = hours.toString();
     const formattedMinutes = (hours > 0 && minutes < 10) ? `0${minutes}` : minutes.toString(); // add leading zero
     const formattedSeconds = ((minutes > 0 || hours > 0) && seconds < 10) ? `0${seconds}` : seconds.toString(); // add leading zero
+    const formattedMilliseconds = milliseconds.toString().padStart(3, '0').slice(0, 2); // Display milliseconds to 2 decimal places
 
     if(hours > 0) {
       document.title = `${formattedHours}h ${formattedMinutes}m ${formattedSeconds}s - Self Regulator`;
@@ -68,6 +75,7 @@ function Stopwatch(): ReactElement {
           <DigitWrapper value={formattedHours} unit="h"/>
           <DigitWrapper value={formattedMinutes} unit="m"/>
           <DigitWrapper value={formattedSeconds} unit="s"/>
+          <DigitWrapper value={formattedMilliseconds} unit="ms"/>
         </>
       )
     }
@@ -85,9 +93,10 @@ function Stopwatch(): ReactElement {
 
     document.title = `${formattedSeconds}s - Self Regulator`;
     return (
-      <>
+      <div className='ml-[80px]'>
         <DigitWrapper value={formattedSeconds} unit="s"/>
-      </>
+        <DigitWrapper value={formattedMilliseconds} unit="ms"/>
+      </div>
     )
   };
 
@@ -136,16 +145,22 @@ const DigitWrapper = ({ value, unit }: DigitWrapperProps) => {
 
   return (
     <div className="inline-block font-semibold">
-      <span className="inline-block text-[100px]">
+      <span className='inline-block '>
         {digits.map((digit, index) => (
-          <span key={index} className="inline-block w-[65px] text-center">
+          <span 
+            key={index}
+            className={`
+              inline-block  text-center
+              ${unit === "ms" ? "text-[40px] w-[25px] " : "text-[100px] w-[65px]"}
+            `}
+          >
             {digit}
           </span>
         ))}
 
       </span>
       {unit &&
-        <span className={`inline-block text-[30px] mt-auto ${unit === "s" ? "w-0" : "pr-4"}`}>
+        <span className={`inline-block text-[30px] mt-auto w-auto ${unit === "ms" ? "hidden" : "pr-4"}`}>
           {unit}
         </span>
       }

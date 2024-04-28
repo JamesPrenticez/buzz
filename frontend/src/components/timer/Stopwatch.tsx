@@ -102,6 +102,7 @@ function Stopwatch(): ReactElement {
 
   const handleSpacebar = (e: any) => {
     if(!e) return
+    if(e.keyCode !== 32) return;
     e.preventDefault();
     setPlay(prev => !prev)
   }

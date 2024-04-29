@@ -1,3 +1,4 @@
+
 import React, { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom';
 import { Paths } from '@models';
@@ -14,6 +15,7 @@ import {
   TimerPage,
   NotFound,
 } from '@pages';
+import GenerateIdsPage from '@pages/Admin/GenerateIdsPage';
 
 const App = () => {
   return (
@@ -30,6 +32,7 @@ const App = () => {
             </ProtectedRoute>
           }/>
           <Route path={Paths.TIMER} element={<TimerPage />}></Route>
+          <Route path="generate-ids" element={<GenerateIdsPage />}></Route>
           <Route path={Paths.NOT_FOUND} element={<NotFound />}></Route>
         </Routes>
       </Layout>

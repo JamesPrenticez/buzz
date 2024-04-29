@@ -17,6 +17,11 @@ const Home = () => {
           Timer
         </Button>
       </NavLink>
+      <NavLink to="generate-ids">
+        <Button color="info" variant="link" className='px-0'>
+          Generate Ids
+        </Button>
+      </NavLink>
 
     <div>
 

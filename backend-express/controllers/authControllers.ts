@@ -15,27 +15,27 @@ export const login = async (req: Request, res: Response): Promise<any> => {
       where: { email },
     });
 
-    if (user && await verifyPassword(password, user.passwordHash)) {
+    if (user && await verifyPassword(password, user.password_hash)) {
       // Generate a JWT token
-      const accessToken = jwt.sign({ email: user.email, id: user.id }, "your_secret_key_goes_here", { expiresIn: '30m' });
-      const refreshToken = jwt.sign({ email: user.email, id: user.id }, "your_secret_key_goes_here", { expiresIn: '24h' });
+      const accessToken = jwt.sign({ email: user.email, user_id: user.id }, "your_secret_key_goes_here", { expiresIn: '30m' });
+      const refreshToken = jwt.sign({ email: user.email, user_id: user.id }, "your_secret_key_goes_here", { expiresIn: '24h' });
       
       // Destructure user object and replace null values with empty strings
-      const { firstName, lastName, phone, profilePicture, locale, country, permissions, subscription, dateCreated, lastModified } = user || {};
+      const { first_name, last_name, phone, profile_picture, locale, country, permissions, subscription, date_created, last_modified } = user || {};
       
       // Set default values for properties that might be null
       const userData = {
-        firstName: firstName ?? '',
-        lastName: lastName ?? '',
+        first_name: first_name ?? '',
+        last_name: last_name ?? '',
         email,
         phone: phone ?? '',
-        profilePicture: profilePicture ?? '',
+        profile_picture: profile_picture ?? '',
         locale: locale ?? '',
         country: country ?? '',
         permissions: permissions ?? [],
         subscription: subscription ?? '',
-        dateCreated: dateCreated ?? '',
-        lastModified: lastModified ?? ''
+        date_created: date_created ?? '',
+        last_modified: last_modified ?? ''
       };
 
       // HTTPS is lie - client has to be able to read it
@@ -61,8 +61,8 @@ export const login = async (req: Request, res: Response): Promise<any> => {
       // Return user data
       return res.status(200).json({data: { 
         data: userData,
-        accessToken: accessToken,
-        refreshToken: refreshToken
+        access_token: accessToken,
+        refresh_token: refreshToken
       }});
     } else {
       return res.status(401).json({ error: 'Invalid credentials' });
@@ -93,7 +93,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     const newUser = await prisma.user.create({
       data: {
         email,
-        passwordHash: hashedPassword,
+        password_hash: hashedPassword,
       },
     });
 

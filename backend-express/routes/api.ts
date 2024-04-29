@@ -4,10 +4,10 @@ const router = express.Router();
 
 import authRoutes from './authRoutes'
 import userRoutes from './userRoutes'
-import testRoutes from './testRoutes'
+import tasksRoutes from './tasksRoutes'
 
 router.use(authRoutes);
 router.use(userRoutes);
-router.use(testRoutes);
+router.use(tasksRoutes);
 
 export default router;

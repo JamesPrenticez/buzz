@@ -11,15 +11,35 @@ datasource db {
 model User {
   id String @id @default(cuid())
   email String @unique
-  passwordHash String
-  firstName String?
-  lastName String?
+  password_hash String
+  first_name String?
+  last_name String?
   phone String?
-  profilePicture String?
+  profile_picture String?
   locale String?
   country String?
   permissions String?
   subscription String?
-  dateCreated DateTime  @default(now())
-  lastModified DateTime  @updatedAt @default(now())
+  date_created DateTime @default(now())
+  last_modified DateTime @updatedAt @default(now())
+  task_data TaskData[]  @relation("UserData")
+}
+
+// Tasks
+model Task {
+  id String @id @default(cuid())
+  title String
+  description String
+  task_data TaskData[] @relation("TaskDataTasks")
+}
+
+model TaskData {
+  id String @id @default(cuid())
+  user_id String
+  task_id String
+  date_created DateTime @default(now())
+  quantity String
+  unit String
+  user User @relation("UserData", fields: [user_id], references: [id])
+  task Task @relation("TaskDataTasks", fields: [task_id], references: [id])
 }

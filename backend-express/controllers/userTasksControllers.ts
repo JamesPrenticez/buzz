@@ -1,17 +1,11 @@
-import { type Request, type Response } from 'express';
-import { TaskData } from '@prisma/client';
 import prisma from '../prisma';
+import { type User, type TaskData } from '@prisma/client';
+import { type Request, type Response } from '@/models';
 
 // GET
-
-// Define a custom Request interface extending the Express Request interface
-interface ProtectedRequest extends Request {
-  user_id?: string; 
-}
-
-export const getUserTasks = async (req: ProtectedRequest, res: Response): Promise<void> => {
+export const getUserTasks = async (req: Request, res: Response): Promise<void> => {
   /* 
-    #swagger.tags = ['User']
+    #swagger.tags = ['User Tasks']
     #swagger.description = 'Get all tasks associated to a user'
     #swagger.security = [{
       "JWT": []
@@ -53,9 +47,24 @@ export const getUserTasks = async (req: ProtectedRequest, res: Response): Promis
   }
 };
 
-// POST route to create a new task
-export const createUserTask = async (req: Request & { user_id?: string }, res: Response): Promise<void> => {
-  const user_id = "1" // req.user_id;
+// POST
+export const createUserTask = async (req: Request, res: Response): Promise<void> => {
+  /* 
+    #swagger.tags = ['User Tasks']
+    #swagger.description = 'Create a new data object for a user task'
+    #swagger.security = [{
+      "JWT": []
+    }]
+  */  
+
+  const user_id: User["id"] = req.user_id ?? "";
+
+  if (!user_id) {
+    res.status(404).json({
+      error: 'User not found ?!',
+    });
+    return;
+  }
   
   const { 
     task_id, // sleep, meditation ect...
@@ -102,9 +111,17 @@ export const createUserTask = async (req: Request & { user_id?: string }, res: R
 };
 
 // PATCH
-export const updateUserTask = async (req: Request & { user_id?: string }, res: Response): Promise<void> => {
-  const user_id = "1" // req.user_id;
-  const task_id = "1" // req.params.task_id;
+export const updateUserTask = async (req: Request, res: Response): Promise<void> => {
+  /* 
+    #swagger.tags = ['User Tasks']
+    #swagger.description = 'Update a data object for a user task'
+    #swagger.security = [{
+      "JWT": []
+    }]
+  */  
+
+  const user_id = req.user_id;
+  const task_id = req.params.task_id;
   
   const { 
     quantity,

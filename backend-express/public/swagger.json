@@ -85,7 +85,7 @@
     "/api/user/tasks": {
       "get": {
         "tags": [
-          "User"
+          "User Tasks"
         ],
         "description": "Get all tasks associated to a user",
         "responses": {
@@ -103,35 +103,112 @@
         ]
       },
       "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
+        "tags": [
+          "User Tasks"
+        ],
+        "description": "Create a new data object for a user task",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "example": "any"
+                },
+                "quantity": {
+                  "example": "any"
+                },
+                "unit": {
+                  "example": "any"
+                }
+              }
+            }
           }
-        }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/user/tasks/{taskId}": {
       "patch": {
-        "description": "",
+        "tags": [
+          "User Tasks"
+        ],
+        "description": "Update a data object for a user task",
         "parameters": [
           {
             "name": "taskId",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "example": "any"
+                },
+                "unit": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/tasks/all": {
       "get": {
-        "description": "",
+        "tags": [
+          "Tasks"
+        ],
+        "description": "Get all tasks in the database",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Auth credentials.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AuthCredentials"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -142,9 +219,12 @@
         }
       }
     },
-    "/api/users": {
+    "/api/admin/users": {
       "get": {
-        "description": "",
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all users in the database",
         "responses": {
           "200": {
             "description": "OK"

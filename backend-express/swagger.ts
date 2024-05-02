@@ -6,7 +6,10 @@ const endpointsFiles = [
   "./*.ts",
   "./routes/*.ts",
   "./controllers/*.ts",
+  "./controllers/auth/*.ts",
   "./controllers/*/*.ts",
+  "./controllers/**/*.ts",
+  "./controllers/**/**.ts",
   "./models/*.ts",
 ]
 

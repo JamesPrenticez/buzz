@@ -9,7 +9,7 @@ import swaggerUi from "swagger-ui-express"
 import swaggerFile from './public/swagger.json';
 
 // Initialize express
-const app = express();
+export const app = express();
 
 // Allow express to understand cookies (required for HttpOnly)
 app.use(cookieParser());

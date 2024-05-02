@@ -1,5 +1,5 @@
 import express from 'express';
-import * as authControllers from '@/controllers/authControllers'
+import * as authControllers from '../controllers/authControllers'
 const router = express.Router();
 
 router.post('/api/register', authControllers.register);

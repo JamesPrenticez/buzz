@@ -110,7 +110,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     const hashedPassword = await createHashedPassword(password);
 
     // Save the user to the database
-    const newUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email,
         password_hash: hashedPassword,

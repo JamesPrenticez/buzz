@@ -82,6 +82,22 @@
         }
       }
     },
+    "/api/admin/users": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all users in the database",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/user/tasks": {
       "get": {
         "tags": [
@@ -108,6 +124,13 @@
         ],
         "description": "Create a new data object for a user task",
         "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "User ID",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -209,22 +232,6 @@
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/admin/users": {
-      "get": {
-        "tags": [
-          "Admin"
-        ],
-        "description": "Get all users in the database",
         "responses": {
           "200": {
             "description": "OK"

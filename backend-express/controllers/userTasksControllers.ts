@@ -37,7 +37,7 @@ export const getUserTasks = async (req: Request, res: Response): Promise<void> =
  
     res.status(200).json({
       data: {
-        formattedTasks,
+        data: formattedTasks,
       },
     });
   } catch (err) {
@@ -99,7 +99,7 @@ export const createUserTask = async (req: Request, res: Response): Promise<void>
 
     res.status(201).json({
       data: {
-        newTask,
+        data: newTask,
       },
     });
   } catch (err) {
@@ -122,6 +122,7 @@ export const updateUserTask = async (req: Request, res: Response): Promise<void>
 
   const user_id = req.user_id;
   const task_id = req.params.task_id;
+  console.log(task_id)
   
   const { 
     quantity,
@@ -157,7 +158,7 @@ export const updateUserTask = async (req: Request, res: Response): Promise<void>
 
     res.status(200).json({
       data: {
-        updatedTask,
+        data: updatedTask,
       },
     });
   } catch (err) {

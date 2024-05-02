@@ -1,5 +1,5 @@
 import path from 'path';
-import express from 'express';
+import express, { Request } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser'
 
@@ -30,7 +30,12 @@ app.set('json spaces', 2);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve swagger api docs
-app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+const options = {
+  explorer: false,
+  persistAuthorization: true,
+};
+
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile, options))
 
 // Start the server only if the database connection is successful
 const PORT = process.env.PORT || 5000;

@@ -6,6 +6,7 @@ const endpointsFiles = [
   "./*.ts",
   "./routes/*.ts",
   "./controllers/*.ts",
+  "./controllers/*/*.ts",
   "./models/*.ts",
 ]
 
@@ -27,8 +28,22 @@ const doc = {
     },
     // { ... }
   ],
-  securityDefinitions: {},  // by default: empty object
-  definitions: {}           // by default: empty object
+  securityDefinitions: {
+    JWT: {
+      type: 'apiKey',
+      name: 'Authorization',
+      in: 'header',
+    },
+  },
+  security: [{
+    bearerAuth: [],
+  }],
+  definitions: {
+    AuthCredentials: {
+      email: "admin@example.com",
+      password: "password123"
+    },
+  },
 };
 
 // Run the script

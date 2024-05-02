@@ -1,52 +1,22 @@
 import { type Request, type Response } from 'express';
-import { TaskData, User } from '@prisma/client';
+import { TaskData } from '@prisma/client';
 import prisma from '../prisma';
 
-// Get all users
-export const getUserDetails = async (req: Request & { email?: string }, res: Response): Promise<void> => {
-  const userEmail = req.email; // Get email from request object which is ripped from JWT token
+// GET
 
-  try {
-    const user: User | null = await prisma.user.findUnique({
-      where: { email: userEmail },
-    });
+// Define a custom Request interface extending the Express Request interface
+interface ProtectedRequest extends Request {
+  user_id?: string; 
+}
 
-    if (!user) {
-      res.status(404).json({ message: `User with email ${userEmail} not found` });
-      return;
-    }
-
-    // Everything except the password hash
-    const { first_name, last_name, email, phone, profile_picture, locale, country, permissions, subscription, date_created, last_modified } = user;
-
-    const userData = {
-      first_name: first_name ?? '',
-      last_name: last_name ?? '',
-      email,
-      phone: phone ?? '',
-      profilePicture: profile_picture ?? '',
-      locale: locale ?? '',
-      country: country ?? '',
-      permissions: permissions ?? [],
-      subscription: subscription ?? '',
-      dateCreated: date_created ?? '',
-      lastModified: last_modified ?? ''
-    };
-
-    res.status(200).json({
-      data: {
-        data: userData
-      },
-    });
-  } catch (err) {
-    console.error(`Error fetching user with email ${userEmail}:`, err);
-    res.status(500).json({
-      message: `An error occurred while fetching user with email ${userEmail}`,
-    });
-  }
-};
-
-export const getUserTasks = async (req: Request & { user_id?: string }, res: Response): Promise<void> => {
+export const getUserTasks = async (req: ProtectedRequest, res: Response): Promise<void> => {
+  /* 
+    #swagger.tags = ['User']
+    #swagger.description = 'Get all tasks associated to a user'
+    #swagger.security = [{
+      "JWT": []
+    }]
+  */   
   const user_id = req.user_id;
 
   try {
@@ -63,6 +33,7 @@ export const getUserTasks = async (req: Request & { user_id?: string }, res: Res
     });
 
     const formattedTasks = userTasksWithDetails.map(taskData => ({
+      task_data_id: taskData.id,
       title: taskData.task.title,
       date_created: taskData.date_created,
       quantity: taskData.quantity,
@@ -82,3 +53,100 @@ export const getUserTasks = async (req: Request & { user_id?: string }, res: Res
   }
 };
 
+// POST route to create a new task
+export const createUserTask = async (req: Request & { user_id?: string }, res: Response): Promise<void> => {
+  const user_id = "1" // req.user_id;
+  
+  const { 
+    task_id, // sleep, meditation ect...
+    quantity,
+    unit
+  } = req.body;
+
+  try {
+    // Check if task exists
+    const existingTask = await prisma.task.findUnique({
+      where: {
+        id: task_id,
+      },
+    });
+
+    if (!existingTask) {
+      res.status(404).json({
+        message: 'Task not found',
+      });
+      return;
+    }
+
+    const newTask: TaskData = await prisma.taskData.create({
+      data: {
+        task_id,
+        user_id,
+        date_created: new Date(),
+        quantity,
+        unit,
+      }
+    });
+
+    res.status(201).json({
+      data: {
+        newTask,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: 'An error occurred while creating a new task',
+    });
+  }
+};
+
+// PATCH
+export const updateUserTask = async (req: Request & { user_id?: string }, res: Response): Promise<void> => {
+  const user_id = "1" // req.user_id;
+  const task_id = "1" // req.params.task_id;
+  
+  const { 
+    quantity,
+    unit
+  } = req.body;
+
+  try {
+    // First, check if the task belongs to the user
+    const task = await prisma.taskData.findFirst({
+      where: {
+        id: task_id,
+        user_id,
+      },
+    });
+
+    if (!task) {
+      res.status(404).json({
+        message: 'Task not found or does not belong to the user',
+      });
+      return;
+    }
+
+    // Update the task
+    const updatedTask = await prisma.taskData.update({
+      where: {
+        id: task_id,
+      },
+      data: {
+        quantity,
+        unit,
+      },
+    });
+
+    res.status(200).json({
+      data: {
+        updatedTask,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: 'An error occurred while updating the task',
+    });
+  }
+};

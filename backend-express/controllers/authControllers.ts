@@ -7,7 +7,17 @@ import { createHashedPassword, verifyPassword } from '../utils';
 // const secret = process.env.SECRET_KEY 
 
 // Login
-export const login = async (req: Request, res: Response): Promise<any> => {  
+export const login = async (req: Request, res: Response): Promise<any> => {
+  /*
+    #swagger.tags = ['Auth']
+    #swagger.description = 'Login user and return JWT access & refresh along with user details'
+    #swagger.parameters['obj'] = {
+      in: 'body',
+      description: 'Auth credentials.',
+      required: true,
+      schema: { $ref: "#/definitions/AuthCredentials" }
+    }
+  */   
   const { email, password } = req.body;
 
   try {
@@ -73,7 +83,17 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 };
 
 // Register
-export const register = async (req: Request, res: Response): Promise<any> => {  
+export const register = async (req: Request, res: Response): Promise<any> => { 
+  /* #swagger.tags = ['Auth']
+     #swagger.description = 'Create a new user'
+
+      #swagger.parameters['obj'] = {
+        in: 'body',
+        description: 'Auth credentials.',
+        required: true,
+        schema: { $ref: "#/definitions/AuthCredentials" }
+      }
+  */ 
   const { email, password } = req.body;
 
   try {
@@ -98,7 +118,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     });
 
     // Return a success message along with user data if needed
-    return res.status(201).json({ message: 'User registered successfully', data: newUser });
+    return res.status(201).json({ message: 'User registered successfully' });
 
   } catch (err) {
     console.error(err);

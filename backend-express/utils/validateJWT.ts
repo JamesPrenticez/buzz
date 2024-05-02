@@ -8,6 +8,7 @@ export const validateJWT = (req: Request & { user_id?: string }, res: Response, 
 
   // When not using HTTPS only we get from a header
   const authorizationHeader = req.headers.authorization;
+  console.log(authorizationHeader)
 
   if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
     return res.sendStatus(401);

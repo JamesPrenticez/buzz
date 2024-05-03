@@ -38,15 +38,13 @@ export function Tabs({ children, className, defaultActiveIndex = 0 }: Props) {
             )}
             onClick={() => handleClick(index)}
           >
-            <div className='px-4 w-full'>{(child.props as TabProps).name}</div>
+            <div className='p-4 w-full'>{(child.props as TabProps).name}</div>
           </button>
         );
       })}
       </div>
 
-      <div className="bg-shadow">
-        {children[activeIndex]}
-      </div>
+      {children[activeIndex]}
     </>
   );
 }

@@ -11,7 +11,7 @@ export interface IUser {
   subscription?: IUserSubscription;
   dateCreated: string;
   lastModified: string;
-  tasks: IUserTasks[];
+  tasks?: IUserTasks[];
 }
 
 export interface IUserTasks {

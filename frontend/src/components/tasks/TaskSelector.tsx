@@ -42,7 +42,7 @@ function TaskSelector(): ReactElement {
   return (
     <div>
       <label htmlFor="country" className="relative">
-        <p className="font-[500]">Country</p>
+        <p className="font-[500]">Activity</p>
         <Autocomplete
           options={tasks}
           value={formData.task}

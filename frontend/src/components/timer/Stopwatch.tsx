@@ -108,18 +108,18 @@ function Stopwatch(): ReactElement {
   }
 
  return (
-    <div ref={containerRef} className="flex flex-col items-center justify-center">
+    <div ref={containerRef}>
 
-        <div className="" >
+        <div className="self-center justify-self-center">
           {formatElapsedTime(elapsedTime)}
-        </div>
 
-        <div className="flex space-x-2 ">
-          <div className='text-gray-300 w-[50px] h-[50px] cursor-pointer hover:text-white bg-black/50 rounded-full flex items-center justify-center mt-auto'>
+        </div>
+        <div className="w-full flex justify-center space-x-2">
+          <div className='text-gray-300 w-[50px] h-[50px] cursor-pointer hover:text-white rounded-full flex items-center justify-center mt-auto transition-all duration-200 ease-in-out'>
             <ResetIcon onClick={resetTimer}/>
           </div>
 
-          <div className='text-gray-300 w-[70px] cursor-pointer hover:text-white bg-black/50 rounded-full'>
+          <div className={`text-gray-00 w-[80px] cursor-pointer hover:text-white hover:bg-black/50 rounded-full transition-all duration-200 ease-in-out ${play ? 'bg-black/50' : ''}`}>
             {play ? 
               <PauseIcon onClick={() => setPlay(false)}/>
               : 
@@ -127,8 +127,7 @@ function Stopwatch(): ReactElement {
             }
           </div>
 
-          {/* Maybe save */}
-          <div className='text-gray-300 w-[50px] h-[50px] cursor-pointer hover:text-white bg-black/50 rounded-full flex items-center justify-center mt-auto'>
+          <div className='text-gray-300 w-[50px] h-[50px] cursor-pointer hover:text-white rounded-full flex items-center justify-center mt-auto transition-all duration-200 ease-in-out'>
             <CogIcon /> 
           </div>
         </div>

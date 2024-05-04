@@ -1,9 +1,11 @@
 import prisma from '../prisma';
 import { type User, type TaskData } from '@prisma/client';
+
+// import { Request, Response } from 'express';
 import { type Request, type Response } from '@/models';
 
 // GET
-export const getUserTasks = async (req: Request, res: Response): Promise<void> => {
+export const getUserTasks = async (req: Request<{start_date: string, end_date: string}>, res: Response): Promise<void> => {
   /* 
     #swagger.tags = ['User Tasks']
     #swagger.description = 'Get all tasks associated to a user'
@@ -11,11 +13,19 @@ export const getUserTasks = async (req: Request, res: Response): Promise<void> =
       "JWT": []
     }]
   */   
+
   const user_id = req.user_id;
+  const { start_date, end_date } = req.body;
 
   try {
     const userTasksWithDetails = await prisma.taskData.findMany({
-      where: { user_id },
+      where: { 
+        user_id,
+        date_created: {
+          gte: new Date(start_date), // greater than or equal
+          lte: new Date(end_date), // less than or equal
+        }
+      },
       include: {
         task: {
           select: {
@@ -25,6 +35,11 @@ export const getUserTasks = async (req: Request, res: Response): Promise<void> =
         }
       }
     });
+
+    if (!userTasksWithDetails) {
+      res.status(204).json({message: `No data for ${user_id} between ${start_date} and ${end_date}`});
+      return;
+    }
 
     const formattedTasks = userTasksWithDetails.map(taskData => ({
       task_data_id: taskData.id,

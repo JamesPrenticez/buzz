@@ -1,6 +1,7 @@
 import React,  { type ReactElement } from"react";
 import { Autocomplete } from "@components/ui";
 import { createValidationSchema, resolver, useForm, v } from "@util/formValidation";
+import { capitalizeFirstLetter } from "@util";
 
 interface ITask {
   task: string;
@@ -40,14 +41,15 @@ function TaskSelector(): ReactElement {
 
 
   return (
-    <div>
+    <div className="ml-4 mb-4">
       <label htmlFor="country" className="relative">
         <p className="font-[500]">Activity</p>
         <Autocomplete
+          className=""
           options={tasks}
-          value={formData.task}
+          value={capitalizeFirstLetter(formData.task)}
           onChange={(newValue: string) => {
-            setFieldValue("task", newValue);
+            setFieldValue("task", capitalizeFirstLetter(newValue));
           }}
         />
       </label>

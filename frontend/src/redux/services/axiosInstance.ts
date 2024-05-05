@@ -2,12 +2,14 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { 
   mockUsers,
+  mockUserTasks,
 } from '@mocks';
 import { getUserId } from './getUserId';
 import { ACCESS_TOKEN } from '@constant';
 import * as jose from 'jose';
+import { filterTasksByDate } from '@SQL';
 
-const useMockData = false //import.meta.env.VITE_ENV === "development" ? true : false;
+const useMockData = true; //import.meta.env.VITE_ENV === "development" ? true : false;
 const log = false;
 
 export const axiosInstance = axios.create({
@@ -35,15 +37,15 @@ axiosInstance.interceptors.request.use(
 if (useMockData) {
   console.log("using mock data")
   const mockAxiosInstance = new MockAdapter(axiosInstance, { delayResponse: 1500 });
-  const userId = getUserId();
+  const user_id = getUserId();
 
-  const mockAccessToken = await new jose.SignJWT({ "token_type": "access", "email": "jamesprenticez@gmail.com" })
+  const mockAccessToken = await new jose.SignJWT({ "token_type": "access", "email": "jamesprenticez@gmail.com", "user_id": user_id})
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime('30m')
     .sign(new TextEncoder().encode('your_secret_key_goes_here'))
   
-  const mockRefreshToken = await new jose.SignJWT({ "token_type": "refresh", "email": "jamesprenticez@gmail.com" })
+  const mockRefreshToken = await new jose.SignJWT({ "token_type": "refresh", "email": "jamesprenticez@gmail.com", "user_id": user_id })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime('24h')
@@ -56,7 +58,7 @@ if (useMockData) {
   // GET
   //============================================
   // User Details
-  mockAxiosInstance.onGet('user/deatils').reply((config) => {
+  mockAxiosInstance.onGet('user/details').reply((config) => {
     if (log) console.table({method: config.method, endpoint: config.url, params: config.params})
     console.log("calling api/user/details")
 
@@ -69,6 +71,23 @@ if (useMockData) {
       }
     }]
   });
+
+  mockAxiosInstance.onGet('user/tasks').reply((config) => {
+    if (log) console.table({method: config.method, endpoint: config.url, params: config.params})
+    console.log("calling api/user/tasks")
+
+    const startDate = new Date('1993-07-01').toISOString();
+    const endDate = new Date('1993-07-30').toISOString();
+    const filteredTasks = filterTasksByDate(mockUserTasks, startDate, endDate);
+
+    return [200, { 
+      data: {
+        data: filteredTasks
+      }
+    }]
+  });
+
+
 
   //============================================
   // POST

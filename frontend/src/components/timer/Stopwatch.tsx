@@ -130,6 +130,7 @@ function Stopwatch(): ReactElement {
           <div className='text-gray-300 w-[50px] h-[50px] cursor-pointer hover:text-white rounded-full flex items-center justify-center mt-auto transition-all duration-200 ease-in-out'>
             <CogIcon /> 
           </div>
+          <h1>{elapsedTime}</h1>
         </div>
     </div>
   );

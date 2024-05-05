@@ -25,7 +25,7 @@ export const authApi = baseApi.injectEndpoints({
         queryKey: 'token',
       }),
     }),
-    login: builder.mutation<ISuccessResult<{data: IUser, accessToken: IAccessToken, refreshToken: IRefreshToken}>, ILoginDeatils>({
+    login: builder.mutation<ISuccessResult<{data: IUser, access_token: IAccessToken, refresh_token: IRefreshToken}>, ILoginDeatils>({
       query: ({ email, password }) => ({
         url: '/login',
         method: 'POST',

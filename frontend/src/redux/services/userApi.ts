@@ -1,8 +1,9 @@
-import { ISuccessResult, IUser } from '@models';
-import { updateUserField, userSlice } from '@redux/slices';
+import type { ISuccessResult, IUser, IUserTasks } from '@models';
+import { updateUserField, updateUserTasks, userSlice } from '@redux/slices';
 import { RootState } from '@redux/store';
 import { getUserId } from './getUserId';
 import { baseApi } from '@redux/services/baseApi';
+import { Dispatch } from '@reduxjs/toolkit';
 
 // TODO typesafe url params with an interface
 const user_id = getUserId();
@@ -16,7 +17,24 @@ export const userApi = baseApi.injectEndpoints({
         queryKey: 'user',
         providesTags: ['user']
       })
-    }), 
+    }),
+    getUserTasks: builder.query<ISuccessResult<{ data: IUserTasks[] }>, {start_date: string, end_date: string}>({
+      query: ({start_date, end_date}) => ({ 
+        url: 'user/tasks',
+        method: 'GET',
+        body: {
+          start_date,
+          end_date
+        },
+        queryKey: 'userTasks',
+        providesTags: ['userTasks'],
+        onSuccess: (data: IUserTasks[], { dispatch }: { dispatch: Dispatch }) => {
+          console.log(data)
+          console.log("here")
+          dispatch(updateUserTasks(data));
+        },
+      }),
+    }),  
     updateUserDetails: builder.mutation<IUser, Partial<IUser> | { key: keyof IUser, value: any }>({
       query: (update) => ({
         url: 'user',
@@ -54,5 +72,6 @@ export const userApi = baseApi.injectEndpoints({
 
 export const { 
   useGetUserDetailsQuery,
+  useGetUserTasksQuery,
   useUpdateUserDetailsMutation
 } = userApi;

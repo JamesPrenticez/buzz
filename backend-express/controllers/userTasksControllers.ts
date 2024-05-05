@@ -5,17 +5,29 @@ import { type User, type TaskData } from '@prisma/client';
 import { type Request, type Response } from '@/models';
 
 // GET
-export const getUserTasks = async (req: Request<{start_date: string, end_date: string}>, res: Response): Promise<void> => {
+export const getUserTasks = async (req: Request, res: Response): Promise<void> => {
   /* 
     #swagger.tags = ['User Tasks']
     #swagger.description = 'Get all tasks associated to a user'
+    #swagger.parameters['start_date'] = {
+      in: 'query',
+      description: 'Start date for filtering tasks (YYYY-MM-DD)',
+      required: true,
+      type: 'string'
+    }
+    #swagger.parameters['end_date'] = {
+      in: 'query',
+      description: 'End date for filtering tasks (YYYY-MM-DD)',
+      required: true,
+      type: 'string'
+    }
     #swagger.security = [{
       "JWT": []
     }]
   */   
 
   const user_id = req.user_id;
-  const { start_date, end_date } = req.body;
+  const { start_date, end_date } = req.params;
 
   try {
     const userTasksWithDetails = await prisma.taskData.findMany({

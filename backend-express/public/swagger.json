@@ -98,15 +98,55 @@
         }
       }
     },
+    "/api/user/details": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get user details",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/user/tasks": {
       "get": {
         "tags": [
           "User Tasks"
         ],
         "description": "Get all tasks associated to a user",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Start date for filtering tasks (YYYY-MM-DD)",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "End date for filtering tasks (YYYY-MM-DD)",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
           },
           "500": {
             "description": "Internal Server Error"
@@ -124,13 +164,6 @@
         ],
         "description": "Create a new data object for a user task",
         "parameters": [
-          {
-            "name": "user_id",
-            "in": "query",
-            "description": "User ID",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "body",
             "in": "body",
@@ -168,7 +201,7 @@
         ]
       }
     },
-    "/api/user/tasks/{taskId}": {
+    "/api/user/tasks/{task_id}": {
       "patch": {
         "tags": [
           "User Tasks"
@@ -176,7 +209,7 @@
         "description": "Update a data object for a user task",
         "parameters": [
           {
-            "name": "taskId",
+            "name": "task_id",
             "in": "path",
             "required": true,
             "type": "string"

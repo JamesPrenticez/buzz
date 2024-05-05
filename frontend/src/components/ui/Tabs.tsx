@@ -23,7 +23,7 @@ export function Tabs({ children, className, defaultActiveIndex = 0 }: Props) {
   };
 
   return (
-    <>
+    <div className='flex flex-col h-full'>
       <div className={twMerge("flex bg-shadow", className)}>
 
       {children.map((child, index) => {
@@ -33,7 +33,7 @@ export function Tabs({ children, className, defaultActiveIndex = 0 }: Props) {
           <button
             key={index}
             className={twMerge(
-              "grow flex items-center justify-center text-lg text-muted font-bold border-b-2 border-transparent mt-[3px] hover:text-major transition duration-200 ease-in-out",
+              "flex  w-full items-center justify-center text-lg text-muted font-bold border-b-2 border-transparent mt-[3px] hover:text-major transition duration-200 ease-in-out",
               isActive ? "text-major border-major" : ""
             )}
             onClick={() => handleClick(index)}
@@ -44,8 +44,23 @@ export function Tabs({ children, className, defaultActiveIndex = 0 }: Props) {
       })}
       </div>
 
+      {/* TODO - fade-in out transition */}
+      {/* <div className={`flex flex-grow transition duration-2000 ease-in-out`}> */}
+        {/* {children.map((child, index) => {
+          console.log(index)
+          if (!isValidElement(child)) return null;
+
+          return (
+            <div key={index} className={`flex flex-grow transition duration-1000 ease-in-out ${index === activeIndex ? "opacity-1" : "opacity-0"}`}>
+              {child}
+            </div>
+          );
+        })} */}
+      {/* </div>  */}
+
       {children[activeIndex]}
-    </>
+
+    </div>
   );
 }
 

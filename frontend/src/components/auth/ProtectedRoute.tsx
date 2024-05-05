@@ -42,7 +42,7 @@ function ProtectedRoute({children}: Props): ReactElement{
       await handleRefreshAccessToken();
       return;
     } 
-    
+
     dispatch(loginUser())
   }
 

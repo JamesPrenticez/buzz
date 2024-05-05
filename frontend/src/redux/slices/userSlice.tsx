@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { IUser } from '@models';
+import type { IUser, IUserTasks } from '@models';
 import { userApi } from '@redux/services';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@constant';
 import { authApi } from '@redux/services/authApi';
@@ -15,8 +15,8 @@ const initialState: UserState = {
   data: {
     id: "",
     email: "",
-    dateCreated: "",
-    lastModified: "",
+    date_created: "",
+    last_modified: "",
   },
   isAuthenticated: false
 };
@@ -38,6 +38,9 @@ export const userSlice = createSlice({
         }
       }
     },
+    updateUserTasks: (state, action: PayloadAction<IUserTasks[]>) => {
+      state.data.tasks = [...(state.data.tasks || []), ...action.payload];
+    },
     loginUser(state) {
       // TODO intergrate with getUserDetails
       state.isAuthenticated = true;
@@ -46,8 +49,8 @@ export const userSlice = createSlice({
       state.data = {
         id: "",
         email: "",
-        dateCreated: "",
-        lastModified: "",
+        date_created: "",
+        last_modified: "",
       } as IUser;
       state.isAuthenticated = false;
       localStorage.removeItem(ACCESS_TOKEN);
@@ -74,7 +77,8 @@ export const {
   loginUser,
   logoutUser,
   updateUser,
-  updateUserField
+  updateUserField,
+  updateUserTasks
 } = userSlice.actions;
 
 export default userSlice;

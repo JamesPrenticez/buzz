@@ -4,6 +4,9 @@ import React, {useState} from 'react'
 
 function GenerateIdsPage() {
   const dateNow = new Date(1993, 6, 17)
+  const ISODate = dateNow.toISOString();
+  const convertedDate = new Date(ISODate)
+
 
   const [selectedDate, setSelectedDate] = useState(dateNow.toString());
 
@@ -25,8 +28,12 @@ function GenerateIdsPage() {
           />
         </Label>
 
-        <h1>{dateNow.toString()}</h1>
-        <h1>{selectedDate}</h1>
+        {/* <h1>{selectedDate}</h1> */}
+        
+        <h1>now {dateNow.toString()}</h1>
+        <h1>ISO {ISODate}</h1>
+        <h1>converted {convertedDate.toString()}</h1>
+
 
       </section>
     </div>

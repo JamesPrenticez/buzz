@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, type ReactNode } from 'react'
+import React, { useState, useEffect, useRef, type ReactNode, type KeyboardEvent } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 type Option = { label: string, value: string }
 
@@ -7,19 +8,19 @@ interface Props extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onCha
   options: Option[];
   onChange: (newValue: string) => void; 
   placeholder?: string;
-  renderIcon?: ReactNode;
+  className: string;
+  icon?: ReactNode;
 }
 
 export function Autocomplete({ 
   value,
   options,
   onChange,
+  className,
   placeholder,
-  renderIcon,
+  icon,
   ...props
 }: Props) {
-
-  let icon = null //renderIcon()
 
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -58,7 +59,7 @@ export function Autocomplete({
     }
   }
 
-  const handleArrowKeys = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleArrowKeys = (e: KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case 'ArrowUp':
         e.preventDefault()
@@ -99,97 +100,154 @@ export function Autocomplete({
   }
 
   return (
-    <>
-      <div
-        ref={containerRef}
-        className={`${isOpen && 'ring-blue-500'} focus:ring-red-500 ring-1 ring-blue-500 relative flex my-1 w-full py-2 cursor-pointer rounded-sm outline-none h-[40px]`}
-      >
-        {/* Icon */}
-        {icon &&
-          <div 
-          className='w-[2rem] flex items-center justify-center pointer-events-none'
-          >
-            {icon}
-          </div>
-        }
-
-        {/* Text Input / Search Box */}
-        <input
-          ref={inputRef}
-          type='text'
-          value={searchValue}
-          className='absolute flex items-center w-full h-full inset-x-0 inset-y-0 px-[12px] outline-none ring-purple-500 bg-transparent placeholder:text-theme-secondary z-50'
-					tabIndex={0}
-					onClick={() => {setIsOpen(!isOpen), isOpen ? inputRef.current!.blur() : null}}
-					onBlur={() => setIsOpen(false)}
-					onKeyDown={(e) => handleArrowKeys(e)}
-          onChange={(e) => handleUpdate(e)}
-          placeholder={
-            searchValue?.length > 0
-              ? ''
-              : value?.length ?? 0 > 0
-              ? value
-              : placeholder || 'Select...'
-          }
-        />
-
-        {/* Carret */}
-        <div
-          className='absolute w-[2rem] right-0 inset-y-0 flex items-center justify-center'
+    <div
+      ref={containerRef}
+      className={twMerge(`
+        ${isOpen && 'ring-major'}
+        ring-1
+        ring-mist
+        relative
+        flex
+        my-1
+        w-full
+        py-2
+        rounded-lg
+        outline-none
+        h-[40px]
+      `, className)}
+    >
+      {/* Icon */}
+      {icon &&
+        <div 
+        className='w-[2rem] flex items-center justify-center pointer-events-none'
         >
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            className={`${
-              isOpen ? '-rotate-90' : 'rotate-0'
-            } 'transition transform ease-in-out duration-200`}
-            height={20}
-            width={20}
-            fill='none'
-            viewBox='0 0 24 24'
-            stroke='currentColor'
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              d='M15 19l-7-7 7-7'
-            />
-          </svg>
-        </div> 
+          {icon}
+        </div>
+      }
 
-        {options ? (
-          <div 
-            className={`${isOpen ? 'block' : 'hidden'} absolute top-10 right-0 left-0 bg-green-500 text-theme-secondary cursor-pointer ring-1 ring-blue-500 rounded-sm max-h-[20rem] overflow-y-scroll z-50`}
-          >
-            {filteredOptions.length > 0 ? (
-              filteredOptions.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    ref={(el) => (itemsRef.current[index] = el)}
-                    className={`flex justify-start items-center w-full px-4 py-2 cursor-pointer focus:outline-none ${
-                      activeIndex === index
-                        ? 'bg-blue-500 text-white'
-                        : 'text-black'
-                    }`}
-                    onMouseMove={() => setActiveIndex(index)}
-                    onMouseDown={() => {
-                      onChange(filteredArray[activeIndex].value)
-                      setSearchValue('')
-                      setFilteredArray(options)
-                      setIsOpen(false)
-                    }}
-                  >
-                    <span>{item.label}</span>
-                  </div>
-                )
-              })
-            ) : (
-              <div className='px-4 py-2'>No options found</div>
-            )}
-          </div>
-        ) : null}
-      </div>
-    </>
+      {/* Carret */}
+      <div
+        className='absolute w-[50px] right-0 inset-y-0 flex items-center justify-center cursor-pointer bg-transparent z-50'
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsOpen(prev => !prev);
+          // TODO - fix
+          if(!inputRef.current) return;
+          inputRef.current.focus();
+        }}
+      >
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          className={`${
+            isOpen ? '-rotate-90' : 'rotate-0'
+          } 'transition transform ease-in-out duration-200`}
+          height={20}
+          width={20}
+          fill='none'
+          viewBox='0 0 24 24'
+          stroke='currentColor'
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            d='M15 19l-7-7 7-7'
+          />
+        </svg>
+      </div> 
+
+      {/* Text Input / Search Box */}
+      <input
+        ref={inputRef}
+        type='text'
+        value={searchValue}
+        className="
+          absolute
+          flex
+          items-center
+          w-[calc(100%)]
+          h-full
+          inset-x-0
+          inset-y-0
+          px-[12px]
+          outline-none
+          rounded-lg 
+          bg-night 
+          placeholder:text-mist
+        "
+        tabIndex={0}
+        onClick={() => {
+          setIsOpen(prev => !prev);
+          // if(!inputRef.current) return;
+          // isOpen ? inputRef.current.blur() : null;
+        }}
+        onBlur={(e) => { 
+          // console.log(e);
+
+          // TODO - explore click away listener here?
+          // or remove click for input and button and move to wrapping container?
+          //setIsOpen(false)
+        }}
+        onKeyDown={(e) => handleArrowKeys(e)}
+        onChange={(e) => handleUpdate(e)}
+        placeholder={
+          searchValue?.length > 0
+            ? ''
+            : value?.length ?? 0 > 0
+            ? value
+            : placeholder || 'Select...'
+        }
+      />
+
+
+
+      {options ? (
+        <div 
+          className={`${isOpen ? 'block' : 'hidden'} 
+          absolute 
+          top-[40px]
+          right-0
+          left-0
+          bg-shadow
+          text-mist
+          cursor-pointer
+          ring-1
+          ring-mist
+          rounded-lg
+          max-h-[20rem]
+          overflow-y-auto
+          z-50
+        `}
+        >
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  ref={(el) => (itemsRef.current[index] = el)}
+                  className={`flex justify-start items-center w-full px-4 py-2 cursor-pointer focus:outline-none ${
+                    activeIndex === index
+                      ? 'bg-tarantula text-white'
+                      : 'text-mist'
+                  }`}
+                  onMouseMove={() => setActiveIndex(index)}
+                  onMouseDown={() => {
+                    onChange(filteredArray[activeIndex].value)
+                    setSearchValue('')
+                    setFilteredArray(options)
+                    setIsOpen(false)
+                  }}
+                >
+                  <span>{item.label}</span>
+                </div>
+              )
+            })
+          ) : (
+            <div className='px-4 py-2'>No options found</div>
+          )}
+        </div>
+      ) : null}
+    </div>
   )
 }

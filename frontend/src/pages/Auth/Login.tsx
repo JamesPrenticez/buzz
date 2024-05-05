@@ -62,8 +62,8 @@ function Login(): ReactElement {
     try {
       const res = await login(formData).unwrap();
       console.log(res)
-      localStorage.setItem(ACCESS_TOKEN, res.data.accessToken)
-      localStorage.setItem(REFRESH_TOKEN, res.data.refreshToken)
+      localStorage.setItem(ACCESS_TOKEN, res.data.access_token)
+      localStorage.setItem(REFRESH_TOKEN, res.data.refresh_token)
       navigate(Paths.SETTINGS);
       console.log('Login successful. Redirecting...');
     } catch (error: any) {

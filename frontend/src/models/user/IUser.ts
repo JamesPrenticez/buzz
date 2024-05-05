@@ -3,18 +3,20 @@ import { ITask, ITaskData } from "@models/task/ITask";
 export interface IUser {
   id: string,
   email: string;
-  firstName?: string;
-  lastName?: string;
+  first_name?: string;
+  last_name?: string;
   phone?: string;
-  profilePicture?: string;
+  profile_picture?: string;
   permissions?: IUserPermissions[];
   subscription?: IUserSubscription;
-  dateCreated: string;
-  lastModified: string;
+  date_created: string;
+  last_modified: string;
+  country?: string;
   tasks?: IUserTasks[];
 }
 
 export interface IUserTasks {
+  id: string;
   title: ITask["title"];
   description: ITask["description"]; 
   data: ITaskData[];

@@ -36,6 +36,7 @@ export default defineConfig({
         { find: '@redux', replacement: '/src/redux' },
         { find: '@util', replacement: '/src/util' },
         { find: '@constant', replacement: '/src/constant' },
+        { find: '@SQL', replacement: '/src/SQL' },
       ],
     }),
   ],

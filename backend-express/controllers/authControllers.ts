@@ -27,8 +27,8 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 
     if (user && await verifyPassword(password, user.password_hash)) {
       // Generate a JWT token
-      const accessToken = jwt.sign({ email: user.email, user_id: user.id }, "your_secret_key_goes_here", { expiresIn: '30m' });
-      const refreshToken = jwt.sign({ email: user.email, user_id: user.id }, "your_secret_key_goes_here", { expiresIn: '24h' });
+      const accessToken = jwt.sign({ token_type: "access", email: user.email, user_id: user.id }, "your_secret_key_goes_here", { expiresIn: '30m' });
+      const refreshToken = jwt.sign({ token_type: "refresh", email: user.email, user_id: user.id }, "your_secret_key_goes_here", { expiresIn: '24h' });
       
       // Destructure user object and replace null values with empty strings
       const { first_name, last_name, phone, profile_picture, locale, country, permissions, subscription, date_created, last_modified } = user || {};
@@ -41,7 +41,6 @@ export const login = async (req: Request, res: Response): Promise<any> => {
         phone: phone ?? '',
         profile_picture: profile_picture ?? '',
         locale: locale ?? '',
-        country: country ?? '',
         permissions: permissions ?? [],
         subscription: subscription ?? '',
         date_created: date_created ?? '',
@@ -125,3 +124,6 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+// access token for easy swagger
+// refresh token to update access

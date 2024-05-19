@@ -1,8 +1,7 @@
 import { DatePicker, Label } from '@components/ui';
-import { DatePicker2 } from '@components/ui/DatePicker2';
 import React, {useState} from 'react'
 
-function GenerateIdsPage() {
+function Dates() {
   const dateNow = new Date(1993, 6, 17)
   const ISODate = dateNow.toISOString();
   const convertedDate = new Date(ISODate)
@@ -22,7 +21,7 @@ function GenerateIdsPage() {
         </Label>
 
         <Label value="End Date:">
-          <DatePicker2 
+          <DatePicker
             initialDate={selectedDate}
             updateDate={(date: string) => handleDateSelection(date)}
           />
@@ -40,4 +39,4 @@ function GenerateIdsPage() {
   )
 }
 
-export default GenerateIdsPage
+export default Dates;

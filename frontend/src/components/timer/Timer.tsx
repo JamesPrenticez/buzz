@@ -11,7 +11,8 @@ import { useGetUserTasksQuery } from '@redux/services';
 
 function Timer(): ReactElement {
   const { tasks } = useAppSelector((state) => state.user.data);
-  const { data, isLoading} = useGetUserTasksQuery({start_date: "1324", end_date: "4312"});
+  const { data, isLoading} = useGetUserTasksQuery({start_date: "2024-05-02", end_date: "2024-05-02"});
+
 
   console.log(data)
 

@@ -17,6 +17,7 @@ export enum Paths {
 
   // Features
   TIMER = '/timer',
+  TASKS = '/tasks',
 
   TEST = '/test',
   ABOUT='/about',

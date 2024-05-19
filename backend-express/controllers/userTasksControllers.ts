@@ -11,15 +11,17 @@ export const getUserTasks = async (req: Request, res: Response): Promise<void> =
     #swagger.description = 'Get all tasks associated to a user'
     #swagger.parameters['start_date'] = {
       in: 'query',
-      description: 'Start date for filtering tasks (YYYY-MM-DD)',
+      description: 'Start date for filtering tasks (YYYY-MM-DD) should be a ISO string',
       required: true,
-      type: 'string'
+      type: 'string',
+      example: '2024-05-02T23:07:36.211Z'
     }
     #swagger.parameters['end_date'] = {
       in: 'query',
-      description: 'End date for filtering tasks (YYYY-MM-DD)',
+      description: 'End date for filtering tasks (YYYY-MM-DD) should be a ISO string',
       required: true,
-      type: 'string'
+      type: 'string',
+      example: '2024-05-02T23:07:36.211Z'
     }
     #swagger.security = [{
       "JWT": []
@@ -27,15 +29,39 @@ export const getUserTasks = async (req: Request, res: Response): Promise<void> =
   */   
 
   const user_id = req.user_id;
-  const { start_date, end_date } = req.params;
+  const { start_date, end_date } = req.query;
+  console.log(start_date, end_date)
+
+  if (!start_date || !end_date) {
+    res.status(400).json({ error: "Both start_date and end_date are required." });
+    return;
+  }
 
   try {
+    // Function to set time to the beginning of the day (00:00:00)
+    const startOfDay = (dateString: string) => {
+      if (dateString.includes("T")) {
+        return new Date(dateString.split("T")[0] + "T00:00:00.000Z");
+      } else {
+        return new Date(dateString + "T00:00:00.000Z");
+      }
+    };
+
+    // Function to set time to the end of the day (23:59:59)
+    const endOfDay = (dateString: string) => {
+      if (dateString.includes("T")) {
+        return new Date(dateString.split("T")[0] + "T23:59:59.999Z");
+      } else {
+        return new Date(dateString + "T23:59:59.999Z");
+      }
+    };
+
     const userTasksWithDetails = await prisma.taskData.findMany({
       where: { 
         user_id,
         date_created: {
-          gte: new Date(start_date), // greater than or equal
-          lte: new Date(end_date), // less than or equal
+          gte: startOfDay(String(start_date)), // greater than or equal to start of the day
+          lte: endOfDay(String(end_date)), // less than or equal to end of the day
         }
       },
       include: {

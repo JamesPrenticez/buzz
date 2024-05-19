@@ -1,10 +1,13 @@
 
-import { createApi } from '@reduxjs/toolkit/query/react'
+import { createApi, retry } from '@reduxjs/toolkit/query/react'
 import { axiosBaseQuery } from './axiosBaseQuery'
+
+// Custom Retries
+const staggeredBaseQuery = retry(axiosBaseQuery(), { maxRetries: 5})
 
 // initialize an empty api service that we'll inject endpoints into later as needed
 export const baseApi = createApi({
-  baseQuery: axiosBaseQuery(),
+  baseQuery: staggeredBaseQuery,
   endpoints: () => ({}),
 })
 
@@ -19,3 +22,6 @@ export const baseApi = createApi({
 // while still maintaining a single API slice which includes all of these endpoints. 
 // See code splitting for how you can use the injectEndpoints property to inject API endpoints from other files into a single API slice definition.
 // Code Splitting - https://redux-toolkit.js.org/rtk-query/usage/code-splitting
+
+// Retries
+// [https://async-transformresponse--rtk-query-docs.netlify.app/concepts/error-handling/#retrying-on-error]

@@ -16,7 +16,6 @@ interface DatePickerReducerState {
   year: number;
   daysInMonthArr: number[];
   blankDaysArr: number[];
-  initialDate?: string;
 }
 
 // const months: { [id: number]: string } = {
@@ -97,13 +96,13 @@ const months: { [id: number]: IMonth } = {
   }
 };
 
-interface ICalendarDay {
+interface SpanishCalendarDay {
   name: string;
   shortName: string;
   spanishCalendarWeekdayNumber: number;
 }
 
-const spanishDays: { [id: number]: ICalendarDay } = {
+const spanishDays: { [id: number]: SpanishCalendarDay } = {
   0: {
     name: "Sunday",
     shortName: "Sun",
@@ -150,10 +149,20 @@ type DatePickeReducerAction =
   | { type: "ADD_MONTH" }
   | { type: "SUBTRACT_MONTH" };
 
+const initState: DatePickerReducerState = {
+  isOpen: false,
+  date: "",
+  displayDate: "",
+  month: 0,
+  year: 0,
+  daysInMonthArr: [],
+  blankDaysArr: []
+};
+
 const datePickerReducer: Reducer<DatePickerReducerState, DatePickeReducerAction> = (state, action) => {
   switch (action.type) {
     case "SET_INIT_STATE": {
-      const today = state.initialDate ? new Date(state.initialDate) : new Date();
+      const today = new Date();
       const month = today.getMonth();
       const year = today.getFullYear();
 
@@ -308,42 +317,20 @@ const formatYearsMonthDay = (date: Date): string => {
   );
 };
 
-interface DatePickerProps {
-  initialDate?: string; // Prop for initial date value
-  updateDate?: (date: string) => void; // Callback function for selected date
-}
-
-export const DatePicker2 = ({ initialDate, updateDate }: DatePickerProps) => {
-
-  const initState: DatePickerReducerState = {
-    isOpen: false,
-    date: "",
-    displayDate: "",
-    month: 0,
-    year: 0,
-    daysInMonthArr: [],
-    blankDaysArr: [],
-    initialDate: initialDate
-  };
-
+export const DatePicker = () => {
   const [state, dispatch] = useReducer<Reducer<DatePickerReducerState, DatePickeReducerAction>>(datePickerReducer, initState);
   const displayDateRef = useRef<HTMLInputElement>(null);
   const daysDivRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     dispatch({ type: "SET_INIT_STATE" });
-  }, []); 
+  }, []);
 
   const isToday = (dayNumber: number) => {
     const today = new Date();
     const day = new Date(state.year, state.month, dayNumber);
 
     return today.toDateString() === day.toDateString() ? true : false;
-  };
-
-  const isSelected = (dayNumber: number) => {
-    const selectedDate = new Date(state.date).getDate();
-    return selectedDate === dayNumber;
   };
 
   // TODO - fix this
@@ -511,25 +498,15 @@ export const DatePicker2 = ({ initialDate, updateDate }: DatePickerProps) => {
               <div
                 onClick={() => {
                   dispatch({ type: "SET_DATE", dayNumber });
-                  if(updateDate){
-                    const dateToFormat = new Date(state.year, state.month, dayNumber);
-                    updateDate(dateToFormat.toString())
-                  }
                   toggleDisplayDateFocus();
                 }}
                 onMouseDown={event => event.preventDefault()}
-                className={`cursor-pointer text-center text-sm rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200 
+                className={`cursor-pointer text-center text-sm rounded-full leading-loose transition ease-in-out duration-100 
                   ${
                     isToday(dayNumber)
                       ? "bg-blue-500 text-white"
-                      : ""
-                  }
-                  ${
-                    isSelected(dayNumber)
-                      ? "bg-purple-500 hover:bg-purple-600 text-white"
-                      : ""
-                  }
-                `}
+                      : "text-gray-700 hover:bg-blue-200"
+                  }`}
               >
                 {dayNumber}
               </div>

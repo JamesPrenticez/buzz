@@ -1,4 +1,8 @@
-import { ITask, ITaskData } from "@models/task/ITask";
+import {
+  type ITask,
+  type ITaskData,
+  TaskUnit
+} from "@models/task/ITask";
 
 export interface IUser {
   id: string,
@@ -19,9 +23,10 @@ export interface IUserTasks {
   id: string;
   title: ITask["title"];
   description: ITask["description"]; 
+  target: string;
+  unit: TaskUnit;
   data: ITaskData[];
 }
-
 
 export enum IUserPermissions {
   ADMIN = 'ADMIN',

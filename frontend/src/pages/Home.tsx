@@ -17,9 +17,14 @@ const Home = () => {
           Timer
         </Button>
       </NavLink>
-      <NavLink to="generate-ids">
+      <NavLink to={Paths.TASKS}>
         <Button color="info" variant="link" className='px-0'>
-          Generate Ids
+          Tasks
+        </Button>
+      </NavLink>
+      <NavLink to="testing">
+        <Button color="info" variant="link" className='px-0'>
+          testing
         </Button>
       </NavLink>
 

@@ -2,6 +2,7 @@ export interface ITask {
   id: string;
   title: string;
   description: string;
+  target: string;
 }
 
 export interface ITaskData {
@@ -10,5 +11,8 @@ export interface ITaskData {
   task_id: string;
   date: string;
   measurement: string;
-  unit: string;
+}
+
+export enum TaskUnit {
+  MS = 'ms',
 }

@@ -13,9 +13,15 @@ import {
   Register,
   UserSettings,
   TimerPage,
+  TasksPage,
   NotFound,
 } from '@pages';
-import GenerateIdsPage from '@pages/Admin/GenerateIdsPage';
+
+// We are using this as testing ground
+import { 
+  DatesPage,
+  FetchPage
+} from '@pages/Admin';
 
 const App = () => {
   return (
@@ -31,8 +37,15 @@ const App = () => {
               <UserSettings />
             </ProtectedRoute>
           }/>
+          <Route path={Paths.TASKS} element={<TasksPage />}></Route>
           <Route path={Paths.TIMER} element={<TimerPage />}></Route>
-          <Route path="generate-ids" element={<GenerateIdsPage />}></Route>
+          <Route path="testing" element={
+            <>
+              <FetchPage />
+              <DatesPage />
+            </>
+            }>
+            </Route>
           <Route path={Paths.NOT_FOUND} element={<NotFound />}></Route>
         </Routes>
       </Layout>

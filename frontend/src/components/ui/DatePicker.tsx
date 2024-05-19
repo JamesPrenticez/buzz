@@ -16,6 +16,7 @@ interface DatePickerReducerState {
   year: number;
   daysInMonthArr: number[];
   blankDaysArr: number[];
+  initialDate?: string;
 }
 
 // const months: { [id: number]: string } = {
@@ -96,13 +97,13 @@ const months: { [id: number]: IMonth } = {
   }
 };
 
-interface SpanishCalendarDay {
+interface ICalendarDay {
   name: string;
   shortName: string;
   spanishCalendarWeekdayNumber: number;
 }
 
-const spanishDays: { [id: number]: SpanishCalendarDay } = {
+const spanishDays: { [id: number]: ICalendarDay } = {
   0: {
     name: "Sunday",
     shortName: "Sun",
@@ -149,20 +150,10 @@ type DatePickeReducerAction =
   | { type: "ADD_MONTH" }
   | { type: "SUBTRACT_MONTH" };
 
-const initState: DatePickerReducerState = {
-  isOpen: false,
-  date: "",
-  displayDate: "",
-  month: 0,
-  year: 0,
-  daysInMonthArr: [],
-  blankDaysArr: []
-};
-
 const datePickerReducer: Reducer<DatePickerReducerState, DatePickeReducerAction> = (state, action) => {
   switch (action.type) {
     case "SET_INIT_STATE": {
-      const today = new Date();
+      const today = state.initialDate ? new Date(state.initialDate) : new Date();
       const month = today.getMonth();
       const year = today.getFullYear();
 
@@ -317,20 +308,42 @@ const formatYearsMonthDay = (date: Date): string => {
   );
 };
 
-export const DatePicker = () => {
+interface DatePickerProps {
+  initialDate?: string; // Prop for initial date value
+  updateDate?: (date: string) => void; // Callback function for selected date
+}
+
+export const DatePicker = ({ initialDate, updateDate }: DatePickerProps) => {
+
+  const initState: DatePickerReducerState = {
+    isOpen: false,
+    date: "",
+    displayDate: "",
+    month: 0,
+    year: 0,
+    daysInMonthArr: [],
+    blankDaysArr: [],
+    initialDate: initialDate
+  };
+
   const [state, dispatch] = useReducer<Reducer<DatePickerReducerState, DatePickeReducerAction>>(datePickerReducer, initState);
   const displayDateRef = useRef<HTMLInputElement>(null);
   const daysDivRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     dispatch({ type: "SET_INIT_STATE" });
-  }, []);
+  }, []); 
 
   const isToday = (dayNumber: number) => {
     const today = new Date();
     const day = new Date(state.year, state.month, dayNumber);
 
     return today.toDateString() === day.toDateString() ? true : false;
+  };
+
+  const isSelected = (dayNumber: number) => {
+    const selectedDate = new Date(state.date).getDate();
+    return selectedDate === dayNumber;
   };
 
   // TODO - fix this
@@ -406,7 +419,7 @@ export const DatePicker = () => {
       </div>
 
       <div
-        className={`focus:outline-none duration-200 mt-12 bg-white rounded-lg shadow p-4 absolute top-0 left-0 ${
+        className={`focus:outline-none duration-200 mt-12 bg-white rounded-lg shadow p-4 absolute top-0 left-0 z-50 ${
           !state.isOpen ? "invisible opacity-0" : "visible opacity-100"
         }`}
         style={{ width: "16rem" }}
@@ -498,15 +511,25 @@ export const DatePicker = () => {
               <div
                 onClick={() => {
                   dispatch({ type: "SET_DATE", dayNumber });
+                  if(updateDate){
+                    const dateToFormat = new Date(state.year, state.month, dayNumber);
+                    updateDate(dateToFormat.toString())
+                  }
                   toggleDisplayDateFocus();
                 }}
                 onMouseDown={event => event.preventDefault()}
-                className={`cursor-pointer text-center text-sm rounded-full leading-loose transition ease-in-out duration-100 
+                className={`cursor-pointer text-center text-sm rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200 
                   ${
                     isToday(dayNumber)
                       ? "bg-blue-500 text-white"
-                      : "text-gray-700 hover:bg-blue-200"
-                  }`}
+                      : ""
+                  }
+                  ${
+                    isSelected(dayNumber)
+                      ? "bg-purple-500 hover:bg-purple-600 text-white"
+                      : ""
+                  }
+                `}
               >
                 {dayNumber}
               </div>

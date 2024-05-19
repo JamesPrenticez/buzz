@@ -20,7 +20,7 @@ export const userApi = baseApi.injectEndpoints({
     }),
     getUserTasks: builder.query<ISuccessResult<{ data: IUserTasks[] }>, {start_date: string, end_date: string}>({
       query: ({start_date, end_date}) => ({ 
-        url: 'user/tasks',
+        url: `user/tasks?start_date=${start_date}&end_date=${end_date}`, 
         method: 'GET',
         body: {
           start_date,
@@ -28,11 +28,12 @@ export const userApi = baseApi.injectEndpoints({
         },
         queryKey: 'userTasks',
         providesTags: ['userTasks'],
-        onSuccess: (data: IUserTasks[], { dispatch }: { dispatch: Dispatch }) => {
-          console.log(data)
-          console.log("here")
-          dispatch(updateUserTasks(data));
-        },
+        // onSuccess: (data: IUserTasks[], { dispatch }: { dispatch: Dispatch }) => {
+        //   console.log(data)
+        //   console.log("here")
+        //   dispatch(updateUserTasks(data));
+        // },
+        // Pagination - https://redux-toolkit.js.org/rtk-query/usage/pagination
       }),
     }),  
     updateUserDetails: builder.mutation<IUser, Partial<IUser> | { key: keyof IUser, value: any }>({
